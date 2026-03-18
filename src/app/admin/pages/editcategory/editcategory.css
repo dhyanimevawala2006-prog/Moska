@@ -1,0 +1,422 @@
+/* E-Store Edit Category Styles */
+.estore-edit-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 40px 30px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: linear-gradient(135deg, #f5f0e8 0%, #e8dfd0 100%);
+  min-height: 100vh;
+  animation: fadeInUp 0.5s ease;
+}
+
+/* Main Card */
+.estore-edit-card {
+  background: white;
+  border-radius: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  border: 1px solid #f0e4d8;
+  transition: all 0.3s ease;
+}
+
+.estore-edit-card:hover {
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Header */
+.estore-edit-header {
+  background: linear-gradient(135deg, #7f6250 0%, #a78770 100%);
+  color: white;
+  padding: 22px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-content i {
+  font-size: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.header-content span {
+  font-size: 1.8rem;
+  font-weight: 600;
+  font-family: 'Playfair Display', serif;
+}
+
+.header-badge {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 8px 18px;
+  border-radius: 60px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(5px);
+}
+
+.header-badge i {
+  margin-right: 6px;
+  font-size: 0.8rem;
+}
+
+/* Card Body */
+.estore-edit-body {
+  padding: 35px 30px;
+  background: #fefcf9;
+}
+
+/* Form Group */
+.estore-form-group {
+  margin-bottom: 28px;
+}
+
+/* Label */
+.estore-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #5f4e40;
+  margin-bottom: 10px;
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.estore-label i {
+  color: #b48d72;
+  font-size: 1rem;
+}
+
+/* Input Field */
+.estore-input {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  border: 2px solid #e8ddd2;
+  border-radius: 16px;
+  background: white;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+.estore-input:focus {
+  outline: none;
+  border-color: #b48d72;
+  box-shadow: 0 0 0 4px rgba(180, 141, 114, 0.12);
+}
+
+.estore-input:hover {
+  border-color: #d4bcab;
+}
+
+/* Image Preview Section */
+.estore-image-section {
+  margin-bottom: 28px;
+  padding: 20px;
+  background: #f8f2ec;
+  border-radius: 20px;
+  border: 1px solid #e8ddd2;
+}
+
+.estore-image-preview {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.estore-preview-img {
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 4px solid white;
+  box-shadow: 0 10px 25px -8px rgba(127, 98, 80, 0.3);
+  transition: all 0.3s ease;
+}
+
+.estore-preview-img:hover {
+  transform: scale(1.03);
+  box-shadow: 0 15px 35px -8px rgba(127, 98, 80, 0.4);
+}
+
+.estore-image-badge {
+  position: absolute;
+  bottom: -10px;
+  right: -10px;
+  background: linear-gradient(135deg, #7f9a6b, #6b8a56);
+  color: white;
+  padding: 5px 15px;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border: 2px solid white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.estore-image-badge i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+/* File Upload Zone */
+.estore-file-zone {
+  background: #f8f2ec;
+  border: 2px dashed #d4bcab;
+  border-radius: 20px;
+  padding: 30px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.estore-file-zone:hover {
+  border-color: #b48d72;
+  background: #fef5ed;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -8px rgba(180, 141, 114, 0.2);
+}
+
+.estore-file-zone i {
+  font-size: 2.5rem;
+  color: #b48d72;
+  margin-bottom: 10px;
+}
+
+.estore-file-zone span {
+  display: block;
+  color: #5f4a39;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.file-hint {
+  font-size: 0.8rem;
+  color: #9a8270;
+}
+
+.estore-file-input {
+  display: none;
+}
+
+/* Selected File Name */
+.file-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  margin-left: 4px;
+  color: #7f9a6b;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.file-name i {
+  color: #7f9a6b;
+}
+
+/* Action Buttons */
+.estore-action-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 35px;
+}
+
+.estore-btn {
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Primary Button (Update) */
+.estore-btn-primary {
+  background: linear-gradient(135deg, #7f6250 0%, #a78770 100%);
+  color: white;
+  box-shadow: 0 10px 20px -8px rgba(127, 98, 80, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.estore-btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px -8px rgba(127, 98, 80, 0.5);
+}
+
+.estore-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Secondary Button (Back) */
+.estore-btn-secondary {
+  background: #f0e4d8;
+  color: #5f4a39;
+  border: 1px solid #d9c5b5;
+}
+
+.estore-btn-secondary:hover {
+  background: #e8d9cb;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Icons */
+.estore-btn i {
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.estore-btn:hover i {
+  transform: scale(1.1);
+}
+
+/* Validation Message */
+app-validation-message {
+  display: block;
+  margin-top: 8px;
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #c1785a;
+  font-weight: 500;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading State */
+.estore-btn-primary.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.estore-btn-primary.loading::after {
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid white;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .estore-edit-container {
+    margin: 20px auto;
+    padding: 0 15px;
+  }
+  
+  .estore-edit-header {
+    padding: 18px 22px;
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .header-content span {
+    font-size: 1.5rem;
+  }
+  
+  .estore-edit-body {
+    padding: 25px 20px;
+  }
+  
+  .estore-action-buttons {
+    flex-direction: column;
+  }
+  
+  .estore-btn {
+    width: 100%;
+  }
+  
+  .estore-preview-img {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .estore-file-zone {
+    padding: 20px;
+  }
+  
+  .estore-file-zone i {
+    font-size: 2rem;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+  .header-content span {
+    font-size: 1.3rem;
+  }
+  
+  .estore-preview-img {
+    width: 100px;
+    height: 100px;
+  }
+  
+  .estore-image-badge {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+  }
+}
+
+/* Focus States */
+.estore-input:focus-visible {
+  outline: 2px solid #b48d72;
+  outline-offset: 2px;
+}
+
+.estore-btn:focus-visible {
+  outline: 2px solid #b48d72;
+  outline-offset: 2px;
+}
+
+/* Animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

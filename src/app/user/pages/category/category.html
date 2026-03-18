@@ -1,0 +1,43 @@
+<!-- CATEGORY SECTION -->
+<section class="category-section reveal">
+    <h2>the MOSKA edit</h2>
+    <p>curated by material & memory</p>
+
+    <div class="search-container">
+        <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            (input)="filterCategories()"
+            placeholder="Search categories..."
+            class="category-search"
+        >
+        <i class="fas fa-search search-icon"></i>
+    </div>
+
+    <div class="category-grid">
+        <a
+            *ngFor="let category of filteredCategories"
+            [href]="'/products/'+category._id"
+            class="category-card"
+        >
+            <div class="category-img">
+                <img
+                    [src]="'http://localhost:3000/uploads/' + category.cat_pic"
+                    [alt]="category.cat_name"
+                    onerror="this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format'"
+                >
+            </div>
+            <div class="category-info">
+                <h3>{{ category.cat_name }}</h3>
+                <p>explore our collection</p>
+                <span class="category-link">shop →</span>
+            </div>
+        </a>
+
+        <div *ngIf="filteredCategories.length === 0" class="empty-categories">
+            <i class="fas fa-search"></i>
+            <p *ngIf="searchTerm">No categories match "{{ searchTerm }}"</p>
+            <p *ngIf="!searchTerm">No categories available at the moment.</p>
+        </div>
+    </div>
+</section>

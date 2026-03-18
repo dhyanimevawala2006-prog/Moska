@@ -1,0 +1,117 @@
+<div class="ec-wrapper">
+
+  <!-- Page Header -->
+  <div class="ec-header">
+    <div class="ec-header-left">
+      <div class="ec-icon">🎟️</div>
+      <div>
+        <h2>Edit Coupon</h2>
+        <p>Update coupon details and settings</p>
+      </div>
+    </div>
+    <div class="ec-badge">Editing</div>
+  </div>
+
+  <form [formGroup]="couponForm" (ngSubmit)="updateCoupon()">
+
+    <!-- Section 1: Coupon Info -->
+    <div class="ec-card">
+      <div class="ec-card-header">
+        <span class="ec-card-icon">📋</span>
+        <h4>Coupon Information</h4>
+      </div>
+
+      <div class="ec-grid-2">
+        <div class="ec-field">
+          <label>Coupon Code</label>
+          <div class="ec-input-wrap">
+            <span class="ec-prefix">🏷️</span>
+            <input type="text" formControlName="code" placeholder="e.g. SAVE20">
+          </div>
+        </div>
+
+        <div class="ec-field">
+          <label>Title</label>
+          <div class="ec-input-wrap">
+            <span class="ec-prefix">✏️</span>
+            <input type="text" formControlName="title" placeholder="e.g. Diwali Offers">
+          </div>
+        </div>
+      </div>
+
+      <div class="ec-field">
+        <label>Description</label>
+        <textarea formControlName="description" placeholder="Write a short description..."></textarea>
+      </div>
+    </div>
+
+    <!-- Section 2: Discount Settings -->
+    <div class="ec-card">
+      <div class="ec-card-header">
+        <span class="ec-card-icon">💰</span>
+        <h4>Discount Settings</h4>
+      </div>
+
+      <div class="ec-grid-3">
+        <div class="ec-field">
+          <label>Discount Type</label>
+          <select formControlName="discountType">
+            <option value="percentage">Percentage (%)</option>
+            <option value="flat">Flat (₹)</option>
+          </select>
+        </div>
+
+        <div class="ec-field">
+          <label>Discount Value</label>
+          <input type="number" formControlName="discountValue" placeholder="0">
+        </div>
+
+        <div class="ec-field">
+          <label>Max Discount (₹)</label>
+          <input type="number" formControlName="maxDiscount" placeholder="0">
+        </div>
+      </div>
+
+      <div class="ec-grid-2">
+        <div class="ec-field">
+          <label>Min Order Amount (₹)</label>
+          <input type="number" formControlName="minOrderAmount" placeholder="0">
+        </div>
+
+        <div class="ec-field">
+          <label>Expire Date</label>
+          <input type="date" formControlName="expireDate">
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: Visibility -->
+    <div class="ec-card">
+      <div class="ec-card-header">
+        <span class="ec-card-icon">👁️</span>
+        <h4>Visibility</h4>
+      </div>
+
+      <div class="ec-toggle-row">
+        <label class="ec-toggle">
+          <input type="checkbox" formControlName="isActive">
+          <span class="ec-toggle-slider"></span>
+          <span class="ec-toggle-label">Active Coupon</span>
+        </label>
+
+        <label class="ec-toggle">
+          <input type="checkbox" formControlName="popular">
+          <span class="ec-toggle-slider"></span>
+          <span class="ec-toggle-label">Show as Popular</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Action -->
+    <div class="ec-actions">
+      <button type="button" class="btn-cancel" (click)="router.navigate(['/admin/coupons'])">Cancel</button>
+      <button type="submit" class="btn-update">💾 Update Coupon</button>
+    </div>
+
+  </form>
+</div>

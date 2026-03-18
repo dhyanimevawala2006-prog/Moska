@@ -1,0 +1,59 @@
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <i class="fas fa-store-alt"></i>
+        <span>estore</span>
+        <span class="badge">admin</span>
+    </div>
+
+    <div class="user">
+        <div class="user-avatar"><i class="fas fa-user-shield"></i></div>
+        <div class="user-info">
+            <h4>{{ adminName }} <i class="fas fa-circle"></i></h4>
+            <p>super admin</p>
+        </div>
+    </div>
+
+    <!-- main navigation -->
+    <div class="nav-item active" routerLink="/admin/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="fas fa-home"></i> dashboard</div>
+    <div class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/admin/showproduct"><i class="fas fa-box"></i> products <span class="count">{{ stats.totalProducts }}</span></div>
+    <div class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/admin/allorder"><i class="fas fa-shopping-cart"></i> orders <span class="count">{{ stats.totalOrders }}</span></div>
+    <div class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/admin/showuser"><i class="fas fa-users"></i> customers <span class="count">{{ stats.totalUsers }}</span></div>
+    <div class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/admin/coupons"><i class="fas fa-gift"></i> coupons</div>
+    
+
+    <div class="nav-item" routerLink="/admin/category" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"><i class="fas fa-tags"></i> categories</div>
+
+    <!-- all 7 categories
+    <div class="category-item active" routerLink="/admin/showproduct"><i class="fas fa-th-large"></i> All Products <span class="category-count">1,361</span></div>
+    <div class="category-item"><i class="fas fa-tshirt clothes-icon"></i> Clothes <span class="category-count">342</span></div>
+    <div class="category-item"><i class="fas fa-microchip electronics-icon"></i> Electronics <span class="category-count">178</span></div>
+    <div class="category-item"><i class="fas fa-capsules medical-icon"></i> Medical <span class="category-count">96</span></div>
+    <div class="category-item"><i class="fas fa-gem jewellery-icon"></i> Jewellery <span class="category-count">154</span></div>
+    <div class="category-item"><i class="fas fa-puzzle-piece toys-icon"></i> Toys <span class="category-count">203</span></div>
+    <div class="category-item"><i class="fas fa-lamp decor-icon"></i> Decor <span class="category-count">167</span></div>
+    <div class="category-item"><i class="fas fa-spray-can-sparkles beauty-icon"></i> Beauty <span class="category-count">221</span></div>
+
+    <div class="nav-item" style="margin-top: 1rem;"><i class="fas fa-cog"></i> Settings</div> -->
+
+    <!-- stats -->
+    <div class="stats">
+        <ng-container *ngIf="!loading; else statsSkeleton">
+            <div class="stat-row">
+                <span>stock</span>
+                <strong>{{ stats.totalStock | number }}</strong>
+            </div>
+            <div class="progress">
+                <div class="progress-fill" [style.width.%]="stockPercent"></div>
+            </div>
+            <div class="stats-footer">
+                <span>{{ stats.totalCategories }} categories</span>
+                <!-- <span>pending {{ stats.pendingOrders }}</span> -->
+            </div>
+        </ng-container>
+        <ng-template #statsSkeleton>
+            <div class="stat-row"><span>stock</span><div class="skel skel-sm"></div></div>
+            <div class="progress"><div class="progress-fill" style="width:0%"></div></div>
+            <div class="stats-footer"><div class="skel skel-xs"></div><div class="skel skel-xs"></div></div>
+        </ng-template>
+    </div>
+</div>

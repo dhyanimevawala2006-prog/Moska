@@ -1,0 +1,42 @@
+.chatbot-icon{
+position: fixed;
+bottom:20px;
+right:20px;
+background:#c86741;
+color:white;
+padding:15px;
+border-radius:50%;
+cursor:pointer;
+}
+
+.chat-container{
+position: fixed;
+bottom:80px;
+right:20px;
+width:300px;
+background:white;
+border:1px solid #ccc;
+border-radius:10px;
+}
+
+.chat-header{
+background:#c86741;
+color:white;
+padding:10px;
+}
+
+.chat-body{
+height:200px;
+overflow-y:auto;
+padding:10px;
+}
+
+.chat-input{
+display:flex;
+padding:10px;
+}
+
+.chat-input input{
+flex:1;
+padding:5px;
+}

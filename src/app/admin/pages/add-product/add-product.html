@@ -1,0 +1,140 @@
+<div class="add-product-container">
+  <div class="add-product-card">
+    <div class="add-product-header">
+      <i class="fas fa-plus-circle"></i>
+      <span>Add New Product</span>
+    </div>
+
+    <div class="add-product-body">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        <div class="add-product-grid">
+
+          <!-- Product Name -->
+          <div class="add-product-group full-width">
+            <label class="add-product-label"><i class="fas fa-tag"></i> Product Name</label>
+            <input type="text" class="add-product-input" formControlName="pname" placeholder="Enter product name">
+            <div class="add-product-validation" *ngIf="productForm.get('pname')?.invalid && productForm.get('pname')?.touched">
+              <i class="fas fa-exclamation-circle"></i> Product name is required
+            </div>
+          </div>
+
+          <!-- Category -->
+          <div class="add-product-group">
+            <label class="add-product-label"><i class="fas fa-list-ul"></i> Category</label>
+            <select class="add-product-input" formControlName="category">
+              <option value="">Select Category</option>
+              <option *ngFor="let cat of categories" [value]="cat.cat_name">{{ cat.cat_name }}</option>
+            </select>
+          </div>
+
+          <!-- Price -->
+          <div class="add-product-group">
+            <label class="add-product-label"><i class="fas fa-dollar-sign"></i> Price</label>
+            <input type="number" class="add-product-input" formControlName="price" placeholder="0.00">
+          </div>
+
+          <!-- Old Price -->
+          <div class="add-product-group">
+            <label class="add-product-label"><i class="fas fa-tag"></i> Old Price (Optional)</label>
+            <input type="number" class="add-product-input" formControlName="oldPrice" placeholder="0.00">
+          </div>
+
+          <!-- Stock -->
+          <div class="add-product-group">
+            <label class="add-product-label"><i class="fas fa-boxes"></i> Stock Quantity</label>
+            <input type="number" class="add-product-input" formControlName="stock" placeholder="0" min="0">
+          </div>
+
+          <!-- Colors -->
+          <div class="add-product-group full-width">
+            <label class="add-product-label"><i class="fas fa-palette"></i> Colors</label>
+            <div class="color-picker-list">
+              <div class="color-picker-row" *ngFor="let c of colorList; let i = index">
+                <input type="color" class="color-picker-input" [value]="c.color"
+                  (input)="updateColor(i, $any($event.target).value)">
+                <span class="color-hex-label">{{ c.color }}</span>
+                <label class="color-img-upload-btn" title="Upload image for this colour">
+                  <i class="fas fa-image"></i>
+                  <input type="file" accept="image/*" style="display:none" (change)="onColorImageChange(i, $event)">
+                </label>
+                <img *ngIf="c.preview" [src]="c.preview" class="color-img-preview">
+                <button type="button" class="color-remove-btn" (click)="removeColor(i)" [disabled]="colorList.length === 1">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <button type="button" class="color-add-btn" (click)="addColor()">
+                <i class="fas fa-plus"></i> Add Color
+              </button>
+            </div>
+          </div>
+
+          <!-- Sizes (Clothes only) -->
+          <div class="add-product-group full-width" *ngIf="productForm.get('category')?.value?.toLowerCase() === 'clothes'">
+            <label class="add-product-label"><i class="fas fa-ruler-horizontal"></i> Sizes</label>
+            <div class="size-checkbox-row">
+              <label class="size-chip" *ngFor="let size of availableSizes"
+                [class.selected]="isSizeSelected(size)"
+                (click)="toggleSize(size)">
+                {{ size }}
+              </label>
+            </div>
+          </div>
+
+          <!-- Description -->
+          <div class="add-product-group full-width">
+            <label class="add-product-label"><i class="fas fa-align-left"></i> Description</label>
+            <textarea class="add-product-textarea" formControlName="description"
+              placeholder="Enter product description" rows="4"></textarea>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="full-width">
+            <div class="add-product-file-row">
+              <!-- Main Image -->
+              <div>
+                <label class="add-product-label"><i class="fas fa-camera"></i> Main Image</label>
+                <div class="add-product-file-zone" (click)="mainFileInput.click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Click to upload main image</span>
+                  <span class="add-product-file-hint">PNG, JPG up to 10MB</span>
+                </div>
+                <input type="file" #mainFileInput class="add-product-file-input"
+                  (change)="onMainFileChange($event)" accept="image/*">
+                <div class="add-product-file-name" *ngIf="mainFileName">
+                  <i class="fas fa-check-circle"></i> {{ mainFileName }}
+                </div>
+              </div>
+              <!-- Hover Image -->
+              <div>
+                <label class="add-product-label"><i class="fas fa-image"></i> Hover Image</label>
+                <div class="add-product-file-zone" (click)="hoverFileInput.click()">
+                  <i class="fas fa-cloud-upload-alt"></i>
+                  <span>Click to upload hover image</span>
+                  <span class="add-product-file-hint">PNG, JPG up to 10MB</span>
+                </div>
+                <input type="file" #hoverFileInput class="add-product-file-input"
+                  (change)="onHoverFileChange($event)" accept="image/*">
+                <div class="add-product-file-name" *ngIf="hoverFileName">
+                  <i class="fas fa-check-circle"></i> {{ hoverFileName }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="full-width">
+            <div class="add-product-actions">
+              <button type="submit" class="add-product-btn add-product-btn-primary" [disabled]="productForm.invalid">
+                <i class="fas fa-plus-circle"></i> Add Product
+              </button>
+              <a routerLink="/admin/products" class="add-product-btn add-product-btn-secondary">
+                <i class="fas fa-times"></i> Cancel
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

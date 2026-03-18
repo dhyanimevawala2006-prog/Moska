@@ -1,0 +1,193 @@
+<div class="settings-container">
+
+  <div class="settings-header">
+    <h1><i class="fas fa-cog"></i> Settings</h1>
+    <p>Manage your store, profile and preferences</p>
+  </div>
+
+  <div class="settings-layout">
+
+    <!-- Sidebar Tabs -->
+    <div class="settings-tabs">
+      <div class="tab-item" *ngFor="let t of tabs"
+           [class.active]="activeTab === t.id"
+           (click)="setTab(t.id)">
+        <i class="fas {{ t.icon }}"></i>
+        <span>{{ t.label }}</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="settings-content">
+
+      <!-- 1. Profile -->
+      <div *ngIf="activeTab === 'profile'" class="settings-card">
+        <div class="card-header"><i class="fas fa-user-circle"></i> My Profile</div>
+        <div class="form-group">
+          <label>Name</label>
+          <input [(ngModel)]="profile.name" type="text" placeholder="Admin Name">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input [(ngModel)]="profile.email" type="email" placeholder="admin@gmail.com">
+        </div>
+        <button class="btn-save" (click)="saveProfile()"><i class="fas fa-save"></i> Save Profile</button>
+      </div>
+
+      <!-- 2. Security -->
+      <div *ngIf="activeTab === 'security'" class="settings-card">
+        <div class="card-header"><i class="fas fa-shield-alt"></i> Security Settings</div>
+        <div class="form-group">
+          <label>Current Password</label>
+          <input [(ngModel)]="security.currentPassword" type="password" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <input [(ngModel)]="security.newPassword" type="password" placeholder="••••••••">
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <input [(ngModel)]="security.confirmPassword" type="password" placeholder="••••••••">
+        </div>
+        <button class="btn-save" (click)="savePassword()"><i class="fas fa-key"></i> Change Password</button>
+        <div class="toggle-row" style="margin-top:1.5rem;">
+          <div>
+            <div class="toggle-label">Two-Factor Authentication (OTP)</div>
+            <div class="toggle-desc">Secure your account with OTP on login</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="security.twoFactor">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 3. Store -->
+      <div *ngIf="activeTab === 'store'" class="settings-card">
+        <div class="card-header"><i class="fas fa-store"></i> Store Settings</div>
+        <div class="form-group">
+          <label>Website / Store Name</label>
+          <input [(ngModel)]="store.siteName" type="text" placeholder="My E-Store">
+        </div>
+        <div class="form-group">
+          <label>Contact Email</label>
+          <input [(ngModel)]="store.contactEmail" type="email" placeholder="support@store.com">
+        </div>
+        <div class="form-group">
+          <label>Contact Phone</label>
+          <input [(ngModel)]="store.contactPhone" type="text" placeholder="+91 XXXXX XXXXX">
+        </div>
+        <div class="form-group">
+          <label>Logo URL</label>
+          <input [(ngModel)]="store.logoUrl" type="text" placeholder="https://...">
+        </div>
+        <button class="btn-save" (click)="saveStore()"><i class="fas fa-save"></i> Save Store Settings</button>
+      </div>
+
+      <!-- 4. Payment -->
+      <div *ngIf="activeTab === 'payment'" class="settings-card">
+        <div class="card-header"><i class="fas fa-credit-card"></i> Payment Settings</div>
+        <div class="form-group">
+          <label>Payment Gateway</label>
+          <select [(ngModel)]="payment.gateway">
+            <option value="razorpay">Razorpay</option>
+            <option value="stripe">Stripe</option>
+            <option value="paypal">PayPal</option>
+            <option value="cod">Cash on Delivery Only</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>API Key</label>
+          <input [(ngModel)]="payment.apiKey" type="text" placeholder="rzp_live_XXXXXXXXXX">
+        </div>
+        <div class="form-group">
+          <label>Currency</label>
+          <select [(ngModel)]="payment.currency">
+            <option value="INR">INR (₹)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+          </select>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Test Mode</div>
+            <div class="toggle-desc">Use sandbox/test credentials</div>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" [(ngModel)]="payment.testMode">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <button class="btn-save" style="margin-top:1.5rem;" (click)="savePayment()"><i class="fas fa-save"></i> Save Payment Settings</button>
+      </div>
+
+      <!-- 5. Shipping -->
+      <div *ngIf="activeTab === 'shipping'" class="settings-card">
+        <div class="card-header"><i class="fas fa-truck"></i> Shipping Settings</div>
+        <div class="form-group">
+          <label>Default Delivery Charge (₹)</label>
+          <input [(ngModel)]="shipping.defaultCharge" type="number" placeholder="50">
+        </div>
+        <div class="form-group">
+          <label>Free Shipping Above (₹)</label>
+          <input [(ngModel)]="shipping.freeAbove" type="number" placeholder="500">
+        </div>
+        <div class="card-header" style="margin-top:1.5rem; font-size:1rem;"><i class="fas fa-map-marker-alt"></i> City-wise Rules</div>
+        <div class="shipping-rules">
+          <div class="rule-row" *ngFor="let r of shipping.rules; let i = index">
+            <span>{{ r.city }}</span>
+            <span>₹{{ r.charge }}</span>
+            <button class="btn-remove" (click)="removeRule(i)"><i class="fas fa-times"></i></button>
+          </div>
+        </div>
+        <div class="add-rule-row">
+          <input [(ngModel)]="newCity" type="text" placeholder="City name">
+          <input [(ngModel)]="newCharge" type="number" placeholder="Charge">
+          <button class="btn-add" (click)="addShippingRule()"><i class="fas fa-plus"></i> Add</button>
+        </div>
+        <button class="btn-save" style="margin-top:1.5rem;" (click)="saveShipping()"><i class="fas fa-save"></i> Save Shipping</button>
+      </div>
+
+      <!-- 6. Notifications -->
+      <div *ngIf="activeTab === 'notification'" class="settings-card">
+        <div class="card-header"><i class="fas fa-bell"></i> Notification Settings</div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">New Order Alerts</div><div class="toggle-desc">Get notified when a new order is placed</div></div>
+          <label class="toggle-switch"><input type="checkbox" [(ngModel)]="notif.orderAlert"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">New User Registration</div><div class="toggle-desc">Alert when a new user signs up</div></div>
+          <label class="toggle-switch"><input type="checkbox" [(ngModel)]="notif.newUser"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Payment Updates</div><div class="toggle-desc">Alerts for payment success/failure</div></div>
+          <label class="toggle-switch"><input type="checkbox" [(ngModel)]="notif.paymentAlert"><span class="slider"></span></label>
+        </div>
+        <div class="toggle-row">
+          <div><div class="toggle-label">Email Notifications</div><div class="toggle-desc">Send alerts via email</div></div>
+          <label class="toggle-switch"><input type="checkbox" [(ngModel)]="notif.emailNotif"><span class="slider"></span></label>
+        </div>
+        <button class="btn-save" style="margin-top:1.5rem;" (click)="saveNotif()"><i class="fas fa-save"></i> Save Notifications</button>
+      </div>
+
+      <!-- 7. User Management -->
+      <div *ngIf="activeTab === 'users'" class="settings-card">
+        <div class="card-header"><i class="fas fa-users-cog"></i> User Management</div>
+        <div class="users-table">
+          <div class="users-head">
+            <span>Name</span><span>Email</span><span>Role</span>
+          </div>
+          <div class="users-row" *ngFor="let u of users">
+            <span>{{ u.name }}</span>
+            <span>{{ u.email }}</span>
+            <span class="role-badge">{{ u.role }}</span>
+          </div>
+        </div>
+        <p style="color:#8f7a68; font-size:0.85rem; margin-top:1rem;">
+          <i class="fas fa-info-circle"></i> Full role & permission management coming soon.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</div>

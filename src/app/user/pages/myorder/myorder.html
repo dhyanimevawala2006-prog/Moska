@@ -1,0 +1,101 @@
+<div class="orders-page">
+
+    <div class="orders-header">
+        <h1>My Orders</h1>
+        <p>{{ orders.length }} order{{ orders.length !== 1 ? 's' : '' }} placed</p>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="orders.length === 0" class="empty-orders">
+        <div class="empty-icon">📦</div>
+        <h3>No orders yet</h3>
+        <p>Looks like you haven't placed any orders.</p>
+        <a routerLink="/" class="btn-shop">Start Shopping</a>
+    </div>
+
+    <!-- ORDER CARDS -->
+    <div class="order-card" *ngFor="let order of orders; let i = index">
+
+        <!-- HEADER -->
+        <div class="order-header">
+            <div class="order-meta">
+                <span class="order-id">Order {{ i + 1 }}</span>
+                <span class="order-date">{{ order.createdAt | date:'mediumDate' }}</span>
+            </div>
+            <span class="status-badge" [ngClass]="order.status?.toLowerCase()">
+                {{ order.status }}
+            </span>
+        </div>
+
+        <!-- TRACKING STEPPER -->
+        <div class="tracking-wrap">
+            <ng-container *ngIf="order.status?.toLowerCase() !== 'cancelled'; else cancelledTpl">
+                <div class="tracking-steps">
+                    <div class="step" *ngFor="let step of trackingSteps; let si = index"
+                         [class.done]="getStepIndex(order.status) > si"
+                         [class.active]="getStepIndex(order.status) === si">
+                        <div class="step-circle">
+                            <i [class]="step.icon"></i>
+                        </div>
+                        <div class="step-line" *ngIf="si < trackingSteps.length - 1"
+                             [class.filled]="getStepIndex(order.status) > si"></div>
+                        <span class="step-label">{{ step.label }}</span>
+                    </div>
+                </div>
+                <p class="tracking-hint" *ngIf="order.status?.toLowerCase() === 'shipped'">
+                    🚚 Your order is on the way!
+                </p>
+                <p class="tracking-hint delivered" *ngIf="order.status?.toLowerCase() === 'delivered'">
+                    ✅ Delivered successfully
+                </p>
+            </ng-container>
+            <ng-template #cancelledTpl>
+                <div class="cancelled-bar">
+                    <i class="fas fa-times-circle"></i> Order Cancelled
+                </div>
+            </ng-template>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="order-items">
+            <div class="order-item" *ngFor="let item of order.items">
+                <div class="item-img">
+                    <img [src]="imageUrl + item.productId?.pic1"
+                         [alt]="item.productId?.pname"
+                         onerror="this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=100'">
+                </div>
+                <div class="item-info">
+                    <h4>{{ item.productId?.pname }}</h4>
+                    <p>Qty: {{ item.quantity }}</p>
+                </div>
+                <div class="item-price">
+                    ₹{{ item.productId?.price * item.quantity }}
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="order-footer">
+            <div class="order-totals">
+                <span *ngIf="order.discount > 0" class="discount-tag">
+                    Discount: −₹{{ order.discount }}
+                </span>
+                <span class="grand-total">Total: ₹{{ order.finalTotal || order.total }}</span>
+            </div>
+            <div class="order-footer-right">
+                <span class="payment-badge" [ngClass]="order.paymentMethod === 'online' ? 'online' : 'cod'">
+                    <span *ngIf="order.paymentMethod === 'online'">💳 Online Payment</span>
+                    <span *ngIf="order.paymentMethod !== 'online'">💵 Cash on Delivery</span>
+                </span>
+                <button
+                    *ngIf="canCancel(order.status)"
+                    class="btn-cancel"
+                    (click)="cancelOrder(order._id)">
+                    Cancel Order
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+</div>

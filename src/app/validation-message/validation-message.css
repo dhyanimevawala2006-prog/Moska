@@ -1,0 +1,30 @@
+.validation-errors {
+  margin-top: 0.25rem;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  animation: slideDown 0.2s ease-out;
+}
+
+.error-message::before {
+  content: '⚠';
+  margin-right: 0.25rem;
+  font-size: 0.875rem;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

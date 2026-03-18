@@ -1,0 +1,104 @@
+<div class="show-user-container">
+
+  <!-- Header -->
+  <div class="show-user-header">
+    <h1>User Management</h1>
+    <div class="header-actions">
+      <button class="btn-secondary" (click)="loadUsers()">
+        <i class="fas fa-sync-alt"></i> Refresh
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total-users"><i class="fas fa-users"></i></div>
+      <div class="stat-content">
+        <h3>Total Users</h3>
+        <p class="stat-value">{{ users.length }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon new-users"><i class="fas fa-user-plus"></i></div>
+      <div class="stat-content">
+        <h3>New This Month</h3>
+        <p class="stat-value">{{ thisMonthCount }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon active-users"><i class="fas fa-search"></i></div>
+      <div class="stat-content">
+        <h3>Search Results</h3>
+        <p class="stat-value">{{ filtered.length }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="filter-section">
+    <div class="search-box">
+      <i class="fas fa-search"></i>
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Search by name, email or phone...">
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-header">
+      <h2>All Users</h2>
+      <span class="user-count">{{ filtered.length }} users</span>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-state" *ngIf="loading">
+      <i class="fas fa-spinner fa-spin"></i> Loading users...
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" *ngIf="!loading && filtered.length === 0">
+      <i class="fas fa-users-slash"></i>
+      <p>No users found</p>
+    </div>
+
+    <div class="table-container" *ngIf="!loading && filtered.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>User</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let user of filtered; let i = index">
+            <td class="idx">{{ i + 1 }}</td>
+            <td>
+              <div class="user-cell">
+                <div class="avatar-circle">{{ user.username?.charAt(0)?.toUpperCase() }}</div>
+                <div class="user-info">
+                  <span class="user-name">{{ user.username }}</span>
+                  <span class="user-id">#{{ user._id?.slice(-6) }}</span>
+                </div>
+              </div>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.mobileno || '—' }}</td>
+            <td>{{ user.createdAt | date:'dd MMM yyyy' }}</td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn delete" title="Delete" (click)="deleteUser(user._id, user.username)">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

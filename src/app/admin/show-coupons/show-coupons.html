@@ -1,0 +1,181 @@
+<div class="show-product-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <h2>
+      <i class="fas fa-ticket-alt"></i>
+      Coupons Management
+    </h2>
+
+    <!-- Search -->
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Search coupon..."
+      >
+    </div>
+
+    <!-- Add -->
+    <a routerLink="/admin/add-coupon" class="btn-add">
+      <i class="fas fa-plus-circle"></i>
+      Add Coupon
+    </a>
+  </div>
+
+  <!-- Table -->
+  <div class="table-card">
+    <div class="table-responsive">
+
+      <table class="products-table">
+
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Discount</th>
+            <th>Min Order</th>
+            <th>Expire Date</th>
+            <th>Status</th>
+            <th>Popular</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let c of filteredCoupons(); let i = index">
+
+            <td class="serial-number">{{ i + 1 }}</td>
+
+            <td>
+              <span class="category-badge">
+                {{ c.code }}
+              </span>
+            </td>
+
+            <td>{{ c.title }}</td>
+
+            <td>
+
+              <span *ngIf="c.discountType=='percentage'">
+                {{ c.discountValue }} %
+              </span>
+
+              <span *ngIf="c.discountType=='flat'">
+                ₹ {{ c.discountValue }}
+              </span>
+
+            </td>
+
+            <td>₹{{ c.minOrderAmount }}</td>
+
+            <td>
+              {{ c.expireDate | date:'dd MMM yyyy' }}
+            </td>
+
+            <td>
+
+              <span
+                class="stock"
+                [class.low]="!c.isActive"
+              >
+                {{ c.isActive ? 'Active' : 'Disabled' }}
+              </span>
+
+            </td>
+
+            <td>
+              <button class="btn-popular" [class.is-popular]="c.popular" (click)="togglePopular(c)" [title]="c.popular ? 'Remove from popular' : 'Mark as popular'">
+                <i class="fas fa-star"></i>
+                {{ c.popular ? 'Popular' : 'Set Popular' }}
+              </button>
+            </td>
+
+            <td>
+
+              <div class="action-buttons">
+
+                <button
+                  class="btn-action btn-edit"
+                  (click)="editCoupon(c._id)"
+                >
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+
+                <button
+                  class="btn-action btn-delete"
+                  (click)="deleteCoupon(c._id)"
+                >
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+
+              </div>
+
+            </td>
+
+          </tr>
+
+          <!-- Empty -->
+
+          <tr *ngIf="filteredCoupons().length === 0">
+            <td colspan="9">
+
+              <div class="empty-state">
+
+                <i class="fas fa-ticket-alt"></i>
+
+                <h3>No Coupons Found</h3>
+
+                <p>Add your first coupon</p>
+
+                <a routerLink="/admin/add-coupon" class="btn-add">
+                  Add Coupon
+                </a>
+
+              </div>
+
+            </td>
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+  </div>
+
+
+  <!-- Stats -->
+
+  <div class="summary-stats" *ngIf="coupons.length > 0">
+
+    <div class="stat-card">
+      <i class="fas fa-ticket-alt"></i>
+      <div>
+        <h4>Total Coupons</h4>
+        <p>{{ coupons.length }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <i class="fas fa-check-circle"></i>
+      <div>
+        <h4>Active Coupons</h4>
+        <p>{{ getActiveCoupons() }}</p>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <i class="fas fa-star"></i>
+      <div>
+        <h4>Popular Coupons</h4>
+        <p>{{ getPopularCoupons() }}</p>
+      </div>
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,25 @@
+html
+
+<div class="otp-container">
+
+    <div class="otp-card">
+
+        <h2>Verify OTP</h2>
+        <p>Enter the 4 digit code sent to your mobile</p>
+
+        <div class="otp-inputs">
+
+            <input maxlength="1" #otp1 (input)="moveNext($event, otp2)">
+            <input maxlength="1" #otp2 (input)="moveNext($event, otp3)" (keydown)="movePrev($event, otp1)">
+            <input maxlength="1" #otp3 (input)="moveNext($event, otp4)" (keydown)="movePrev($event, otp2)">
+            <input maxlength="1" #otp4 (keydown)="movePrev($event, otp3)">
+
+        </div>
+
+        <button (click)="submitOtp(otp1.value + otp2.value + otp3.value + otp4.value)">
+            Verify OTP
+        </button>
+
+    </div>
+
+</div>

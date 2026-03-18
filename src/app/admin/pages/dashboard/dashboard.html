@@ -1,0 +1,170 @@
+<div class="dashboard-container">
+
+  <!-- Loading overlay -->
+  <div class="loading-bar" *ngIf="loading"><i class="fas fa-spinner fa-spin"></i> Loading dashboard...</div>
+  <div class="loading-bar" style="color:red" *ngIf="!loading && errorMsg">⚠️ {{ errorMsg }} — Backend server chalu chhe ke? (localhost:3000)</div>
+
+  <!-- Stats Cards -->
+  <div class="stats-grid" *ngIf="!loading">
+    <div class="stat-card">
+      <div class="stat-icon revenue">
+        <i class="fas fa-rupee-sign"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Total Revenue</h3>
+        <p class="stat-value">₹{{ stats.totalRevenue | number:'1.0-0' }}</p>
+        <span class="stat-change positive">All time</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon orders">
+        <i class="fas fa-shopping-cart"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Total Orders</h3>
+        <p class="stat-value">{{ stats.totalOrders }}</p>
+        <span class="stat-change warning">{{ stats.pendingOrders }} pending</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon customers">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Total Customers</h3>
+        <p class="stat-value">{{ stats.totalUsers }}</p>
+        <span class="stat-change positive">Registered users</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon products">
+        <i class="fas fa-box"></i>
+      </div>
+      <div class="stat-content">
+        <h3>Total Products</h3>
+        <p class="stat-value">{{ stats.totalProducts }}</p>
+        <span class="stat-change positive">{{ stats.totalCategories }} categories</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="charts-section" [hidden]="loading || !!errorMsg">
+
+    <!-- Revenue Trend -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-title">
+          <i class="fas fa-chart-line"></i>
+          <span>Revenue Trend</span>
+        </div>
+        <span class="chart-badge">Recent Orders</span>
+      </div>
+      <div class="chart-body">
+        <canvas #revenueChart></canvas>
+      </div>
+    </div>
+
+    <!-- Order Status -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div class="chart-title">
+          <i class="fas fa-chart-pie"></i>
+          <span>Order Status</span>
+        </div>
+        <span class="chart-badge">Distribution</span>
+      </div>
+      <div class="chart-body donut-body">
+        <canvas #statusChart></canvas>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tables Section -->
+  <div class="tables-grid" *ngIf="!loading">
+
+    <!-- Recent Orders -->
+    <div class="table-card">
+      <div class="card-header">
+        <h2>Recent Orders</h2>
+        <div class="dash-search">
+          <i class="fas fa-search"></i>
+          <input type="text" [(ngModel)]="orderSearch" placeholder="Search orders...">
+        </div>
+        <a routerLink="/admin/allorder" class="view-all">View All</a>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of filteredOrders">
+              <td class="order-id">#{{ order._id?.slice(-6)?.toUpperCase() }}</td>
+              <td>{{ order.userId?.username || 'Guest' }}</td>
+              <td>{{ order.items?.length }} item(s)</td>
+              <td>₹{{ order.finalTotal || order.total | number:'1.0-0' }}</td>
+              <td><span class="badge" [class]="getStatusClass(order.status)">{{ order.status }}</span></td>
+              <td>{{ order.createdAt | date:'dd MMM yyyy' }}</td>
+            </tr>
+            <tr *ngIf="filteredOrders.length === 0">
+              <td colspan="6" class="empty-row">No orders found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="table-card">
+      <div class="card-header">
+        <h2>Latest Products</h2>
+        <div class="dash-search">
+          <i class="fas fa-search"></i>
+          <input type="text" [(ngModel)]="productSearch" placeholder="Search products...">
+        </div>
+        <a routerLink="/admin/showproduct" class="view-all">View All</a>
+      </div>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let p of filteredProducts">
+              <td>
+                <div class="product-cell">
+                  <img [src]="getProductImg(p)" [alt]="p.pname" onerror="this.src='https://via.placeholder.com/40'">
+                  <span>{{ p.pname }}</span>
+                </div>
+              </td>
+              <td>{{ p.category?.cat_name || '—' }}</td>
+              <td>₹{{ p.price | number:'1.0-0' }}</td>
+              <td><span class="stock-badge" [class]="getStockClass(p.stock)">{{ getStockLabel(p.stock) }}</span></td>
+            </tr>
+            <tr *ngIf="filteredProducts.length === 0">
+              <td colspan="4" class="empty-row">No products found</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

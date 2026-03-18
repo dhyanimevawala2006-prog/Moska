@@ -1,0 +1,56 @@
+<div class="login-wrapper">
+  <div class="login-card">
+
+    <!-- Left visual -->
+    <div class="left-visual">
+      <div class="visual-content">
+        <i class="fas fa-user-shield"></i>
+        <h1>eStore</h1>
+        <p>admin control panel</p>
+      </div>
+    </div>
+
+    <!-- Right form -->
+    <div class="right-form">
+      <div class="form-header">
+        <h2>Admin Login</h2>
+        <p>Sign in to manage your store</p>
+      </div>
+
+      <form [formGroup]="frmGrp" (ngSubmit)="onsubmit()">
+
+        <div class="input-group">
+          <label><i class="fas fa-envelope me-1"></i> Admin Email</label>
+          <input formControlName="email" type="email" placeholder="admin@gmail.com">
+          <span class="err" *ngIf="frmGrp.get('email')?.invalid && frmGrp.get('email')?.touched">
+            Valid email required
+          </span>
+        </div>
+
+        <div class="input-group">
+          <label><i class="fas fa-lock me-1"></i> Password</label>
+          <input formControlName="password" type="password" placeholder="••••••••">
+          <span class="err" *ngIf="frmGrp.get('password')?.invalid && frmGrp.get('password')?.touched">
+            Password required
+          </span>
+        </div>
+
+        <button type="submit" class="btn-login" [disabled]="loading">
+          <i class="fas fa-sign-in-alt"></i>
+          {{ loading ? 'Signing in...' : 'Login to Admin' }}
+        </button>
+      </form>
+
+      <div class="forgot-link">
+        <a routerLink="/admin/forgot-password">
+          <i class="fas fa-key"></i> Forgot Password?
+        </a>
+      </div>
+
+      <div class="back-link">
+        <a routerLink="/">← Back to Store</a>
+      </div>
+    </div>
+
+  </div>
+</div>

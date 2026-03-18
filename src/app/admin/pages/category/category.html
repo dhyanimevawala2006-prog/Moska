@@ -1,0 +1,119 @@
+<div class="estore-category-container">
+  <!-- PAGE HEADER -->
+  <div class="estore-category-header">
+    <div class="header-left">
+      <h2>
+        <i class="fas fa-tags"></i> 
+        All Categories
+      </h2>
+      <p class="header-subtitle">Manage your e-store categories</p>
+    </div>
+    
+    <div class="header-right">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input 
+          type="text" 
+          [(ngModel)]="searchTerm" 
+          (input)="filterCategories()"
+          placeholder="Search categories..."
+          class="search-input"
+        >
+      </div>
+      
+      <a routerLink="/admin/addcategory" class="estore-btn-add">
+        <i class="fas fa-plus-circle"></i> 
+        <span>Add Category</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- TABLE CARD -->
+  <div class="estore-table-card">
+    <div class="estore-table-responsive">
+      <table class="estore-category-table">
+        <thead>
+          <tr>
+            <th width="8%">#</th>
+            <th width="32%">Category Name</th>
+            <th width="40%">Category Image</th>
+            <th width="20%">Actions</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <tr *ngFor="let category of filteredCategories; let i = index">
+            <td class="estore-serial">
+              <span class="serial-badge">{{ i + 1 }}</span>
+            </td>
+            
+            <td class="estore-category-name">
+              <div class="name-wrapper">
+                <i class="fas fa-tag category-icon"></i>
+                <span class="category-text">{{ category.cat_name }}</span>
+              </div>
+            </td>
+            
+            <td class="estore-category-image">
+              <div class="image-wrapper">
+                <img
+                  [src]="'http://localhost:3000/uploads/' + category.cat_pic"
+                  class="estore-cat-img"
+                  alt="{{ category.cat_name }}"
+                  (click)="viewImage(category.cat_pic); $event.stopPropagation()"
+                  title="Click to view full size"
+                  style="cursor: pointer;"
+                  onerror="this.src='assets/images/default-category.jpg'"
+                />
+              </div>
+            </td>
+            
+            <td class="estore-action-btns">
+              <button 
+                class="estore-btn estore-btn-edit" 
+                (click)="editCategory(category._id)"
+                title="Edit Category"
+                type="button"
+                style="cursor: pointer; pointer-events: auto;"
+              >
+                <i class="fas fa-pencil-alt" style="pointer-events: none;"></i>
+              </button>
+              
+              <button
+                class="estore-btn estore-btn-delete"
+                (click)="deleteCategory(category._id)"
+                title="Delete Category"
+                type="button"
+                style="cursor: pointer; pointer-events: auto;"
+              >
+                <i class="fas fa-trash-alt" style="pointer-events: none;"></i>
+              </button>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="filteredCategories.length === 0">
+            <td colspan="4" class="estore-empty-state">
+              <div class="empty-state-content">
+                <i class="fas fa-tags"></i>
+                <h3>No Categories Found</h3>
+                <p *ngIf="searchTerm">No categories match your search criteria.</p>
+                <p *ngIf="!searchTerm">Click the "Add Category" button to create your first category.</p>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal" *ngIf="showImageModal" (click)="closeImageModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <button class="close-modal" (click)="closeImageModal()">
+        <i class="fas fa-times"></i>
+      </button>
+      <img [src]="selectedImage" alt="Category Image" class="modal-image">
+    </div>
+  </div>
+</div>

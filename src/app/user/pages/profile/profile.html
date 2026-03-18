@@ -1,0 +1,46 @@
+<div class="profile-page" *ngIf="user">
+
+  <div class="profile-card">
+    <div class="avatar">{{ user.username?.charAt(0)?.toUpperCase() }}</div>
+    <h2 class="username">{{ user.username }}</h2>
+    <p class="email">{{ user.email }}</p>
+  </div>
+
+  <div class="info-card">
+    <h3>Account Details</h3>
+    <div class="info-row">
+      <span class="label">Name</span>
+      <span class="value">{{ user.username }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Email</span>
+      <span class="value">{{ user.email }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Mobile</span>
+      <span class="value">{{ user.mobileno }}</span>
+    </div>
+    <div class="info-row">
+      <span class="label">Member Since</span>
+      <span class="value">{{ user.createdAt | slice:0:10 }}</span>
+    </div>
+  </div>
+
+  <div class="action-cards">
+    <a routerLink="/myorder" class="action-card orders">
+      <i class="fas fa-box"></i>
+      <span>My Orders</span>
+      <p>Track and manage your orders</p>
+    </a>
+    <a routerLink="/wishlist" class="action-card wishlist">
+      <i class="fas fa-heart"></i>
+      <span>My Wishlist</span>
+      <p>Products you loved</p>
+    </a>
+  </div>
+
+  <button class="btn-logout" (click)="logout()">
+    <i class="fas fa-sign-out-alt"></i> Logout
+  </button>
+
+</div>

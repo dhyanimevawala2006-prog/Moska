@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Store · Sign Up</title>
+    
+</head>
+<body>
+
+<div class="card">
+    <!-- LEFT: grocery image (unchanged) -->
+    <div class="brand-panel">
+        <div class="brand-content">
+            <div class="logo-tag">
+                <span class="logo">e-store</span>
+                <span style="background: #ffffff30; backdrop-filter: blur(4px); padding: 0.25rem 0.75rem; border-radius: 30px; font-size:0.7rem;">est. 2025</span>
+            </div>
+            <h2>Shop Smart<br>Shop Online</h2>
+            <p>Join 50,000+ happy customers getting the best deals delivered to your doorstep.</p>
+            <ul class="feature-list">
+                <li>✅ Wide range of products</li>
+                <li>🚚 Free delivery on orders over ₹500</li>
+                <li>⏱️ Fast & reliable delivery</li>
+                <li>💳 Secure payment options</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- RIGHT: form – ONLY COLORS UPDATED to match the image -->
+    <div class="form-panel">
+        <div class="form-header">
+            <div class="overline">sign up — it's free</div>
+            <h1>Create account</h1>
+            <p>Welcome! please fill in your details.</p>
+        </div>
+
+        <form [formGroup]="frmGrp" (ngSubmit)="onsubmit()">
+            <div class="form-grid">
+                <!-- name row -->
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="first_name">First name</label>
+                        <input formControlName="username" type="text" id="first_name" placeholder="John" required>
+                        <app-validation-message [control]="frmGrp.get('username')"></app-validation-message>
+                    </div>
+                </div>
+
+                <!-- email -->
+                <div class="input-group">
+                    <label for="email">Email address</label>
+                    <input formControlName="email" type="email" id="email" placeholder="john.doe@example.com" required>
+                    <app-validation-message [control]="frmGrp.get('email')"></app-validation-message>
+                </div>
+
+                <!-- phone -->
+                <div class="input-group">
+                    <label for="phone">Phone number</label>
+                    <input formControlName="mobileno" type="tel" id="phone" placeholder="9876543210" required>
+                    <app-validation-message [control]="frmGrp.get('mobileno')"></app-validation-message>
+                </div>
+
+                <!-- password row -->
+                <div class="input-row">
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input formControlName="password" type="password" id="password" placeholder="••••••" required>
+                        <app-validation-message [control]="frmGrp.get('password')"></app-validation-message>
+                    </div>
+                </div>
+
+                <!-- terms checkbox -->
+                <div class="terms-group">
+                    <input type="checkbox" id="terms" checked required>
+                    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.</label>
+                </div>
+
+                <!-- submit button with new color -->
+                <button type="submit" class="btn-primary">Create account</button>
+            </div>
+        </form>
+
+        <!-- login link with updated green -->
+        <div class="login-link">
+            Already have an account? <a routerLink="/login">Log in</a>
+            &nbsp;·&nbsp; <a routerLink="/forgot-password" style="color:#8b6f47;">Forgot password?</a>
+        </div>
+
+        <!-- divider (colors untouched but kept) -->
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span>or sign up with</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <div class="social-login">
+            <div class="social-btn">🔵 Google</div>
+            <div class="social-btn">📘 Facebook</div>
+            <div class="social-btn">🍏 Apple</div>
+        </div>
+
+        <!-- secure note with updated color -->
+        <div class="secure-note">
+            🔒 SSL encrypted · 100% secure
+        </div>
+    </div>
+</div>
+
+<!-- 
+    COLOR CHANGES ONLY:
+    - form background: #fafffa
+    - overline: #1d6e2e
+    - heading: #1d3b1d
+    - labels: #3b5e3b
+    - input border: #c2d9c2
+    - placeholder: #a8c0a8
+    - button: #1d6e2e (hover #135a22)
+    - links: #1d6e2e
+    - checkbox accent: #1d6e2e
+    everything else 100% identical to previous version.
+-->
+</body>
+</html>

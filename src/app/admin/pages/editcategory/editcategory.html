@@ -1,0 +1,100 @@
+<div class="estore-edit-container">
+  <!-- Main Card -->
+  <div class="estore-edit-card">
+    <!-- Card Header -->
+    <div class="estore-edit-header">
+      <div class="header-content">
+        <i class="fas fa-pen-square"></i>
+        <span>Edit Category</span>
+      </div>
+      <div class="header-badge">
+        <i class="fas fa-tag"></i> e-store
+      </div>
+    </div>
+
+    <!-- Card Body -->
+    <div class="estore-edit-body">
+      <form [formGroup]="frmGrp" (ngSubmit)="onUpdate()">
+        
+        <!-- Category Name -->
+        <div class="estore-form-group">
+          <label class="estore-label">
+            <i class="fas fa-tag"></i>
+            Category Name
+          </label>
+          <input
+            type="text"
+            formControlName="cat_name"
+            class="estore-input"
+            placeholder="Enter category name"
+          />
+          <app-validation-message
+            [control]="frmGrp.get('cat_name')">
+          </app-validation-message>
+        </div>
+
+        <!-- Old Image Preview -->
+        <div class="estore-image-section" *ngIf="oldImage">
+          <label class="estore-label">
+            <i class="fas fa-image"></i>
+            Current Image
+          </label>
+          <div class="estore-image-preview">
+            <img
+              [src]="'http://localhost:3000/uploads/' + oldImage"
+              alt="Current category"
+              class="estore-preview-img"
+            />
+            <span class="estore-image-badge">
+              <i class="fas fa-check-circle"></i> Active
+            </span>
+          </div>
+        </div>
+
+        <!-- New Image Upload -->
+        <div class="estore-form-group">
+          <label class="estore-label">
+            <i class="fas fa-cloud-upload-alt"></i>
+            Change Category Image
+          </label>
+          <div class="estore-file-zone" (click)="fileInput.click()">
+            <i class="fas fa-upload"></i>
+            <span>Click to upload or drag & drop</span>
+            <span class="file-hint">PNG, JPG up to 10MB</span>
+          </div>
+          <input
+            type="file"
+            #fileInput
+            class="estore-file-input"
+            (change)="onFileChange($event)"
+            accept="image/*"
+          />
+          <small class="file-name" *ngIf="selectedFile">
+            <i class="fas fa-check-circle"></i> {{ selectedFile.name }}
+          </small>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="estore-action-buttons">
+          <button 
+            type="submit" 
+            class="estore-btn estore-btn-primary"
+            [disabled]="frmGrp.invalid"
+          >
+            <i class="fas fa-save"></i>
+            <span>Update Category</span>
+          </button>
+          
+          <a 
+            routerLink="/admin/category" 
+            class="estore-btn estore-btn-secondary"
+          >
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to List</span>
+          </a>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

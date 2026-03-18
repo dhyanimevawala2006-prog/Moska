@@ -1,0 +1,185 @@
+<!-- NAV with interactive profile & auth -->
+
+
+<!-- CART PAGE -->
+<div class="cart-page">
+
+    <!-- BREADCRUMB -->
+    <div class="breadcrumb-bar">
+        <span>Home</span>
+        <span class="sep">›</span>
+        <span class="active">Shopping Cart</span>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="cart-page-header">
+        <h1>Your Cart</h1>
+        <p>{{ cartItems.length }} item{{ cartItems.length !== 1 ? 's' : '' }} in your bag</p>
+    </div>
+
+    <!-- EMPTY STATE -->
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+        <div class="empty-icon">🛍️</div>
+        <h3>Your cart is empty</h3>
+        <p>Looks like you haven't added anything yet.</p>
+        <a routerLink="/" class="btn-browse">Browse Collection</a>
+    </div>
+
+    <!-- CART LAYOUT -->
+    <div class="cart-layout" *ngIf="cartItems.length > 0">
+
+        <!-- LEFT: CART ITEMS -->
+        <div class="cart-items-col">
+
+            <!-- Column Labels -->
+            <div class="cart-labels">
+                <span>Product</span>
+                <span>Qty</span>
+                <span>Price</span>
+            </div>
+
+            <!-- Item Row -->
+            <div class="cart-item" *ngFor="let item of cartItems">
+
+                <div class="item-img-wrap">
+                    <img [src]="imageUrl + item.productId.pic1" [alt]="item.productId.pname">
+                </div>
+
+                <div class="item-details">
+                    <span class="item-cat">{{ item.productId.category?.cat_name }}</span>
+                    <h4>{{ item.productId.pname }}</h4>
+                    <p class="item-desc">{{ item.productId.description }}</p>
+
+                    <button class="btn-remove" (click)="remove(item.productId._id)">
+                        <span>✕</span> Remove
+                    </button>
+                </div>
+
+                <div class="qty-control">
+                    <button (click)="decrease(item.productId._id)">−</button>
+                    <span>{{ item.quantity }}</span>
+                    <button (click)="increase(item.productId._id)">+</button>
+                </div>
+
+                <div class="item-price">
+                    ₹{{ item.productId.price * item.quantity }}
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT: ORDER SUMMARY -->
+        <div class="summary-col">
+
+            <div class="summary-card">
+
+                <h3>Order Summary</h3>
+
+                <!-- COUPON -->
+                <div class="coupon-section">
+                    <label>Promo Code</label>
+
+                    <div class="coupon-row">
+                        <input #couponInput type="text" placeholder="Enter code" [(ngModel)]="couponCode"
+                            (input)="resetCoupon()" />
+                        <button (click)="applyCoupon(couponInput.value)">Apply</button>
+                    </div>
+
+                    <!-- VIEW ALL BUTTON -->
+                    <div class="view-all-coupons" (click)="openCouponModal()">
+                        View all coupons
+                    </div>
+
+                    <!-- Coupon Applied -->
+                    <div *ngIf="discount > 0" class="coupon-applied">
+                        ✓ Coupon applied — ₹{{ discount }} off
+                    </div>
+
+                    <div *ngIf="couponError" class="coupon-error">
+                        {{ couponError }}
+                    </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-rows">
+                    <div class="summary-row">
+                        <span>Subtotal</span>
+                        <span>₹{{ total }}</span>
+                    </div>
+
+                    <div class="summary-row discount" *ngIf="discount > 0">
+                        <span>Discount</span>
+                        <span>− ₹{{ discount }}</span>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Delivery</span>
+                        <span>₹40</span>
+                    </div>
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span class="total-amt">₹{{ (total + 40) - discount }}</span>
+                </div>
+
+                <button class="btn-checkout" (click)="goToCheckout()">Proceed to Checkout →</button>
+
+                <div class="trust-row">
+                    <div class="trust-item">🔒 Secure</div>
+                    <div class="trust-item">🚚 Fast Delivery</div>
+                    <div class="trust-item">↩ Easy Returns</div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- COUPON MODAL -->
+<div class="coupon-modal-bg" *ngIf="showCouponModal" (click)="closeCouponModal()">
+
+    <div class="coupon-modal" (click)="$event.stopPropagation()">
+
+        <div class="coupon-header">
+            <h3>Available Coupons</h3>
+            <span class="close-btn" (click)="closeCouponModal()">✕</span>
+        </div>
+
+        <div class="coupon-body">
+
+            <div class="coupon-card" *ngFor="let c of coupons">
+
+                <div class="coupon-info">
+                    <h4>{{ c.code }}</h4>
+                    <p>{{ c.title }}</p>
+
+                    <span class="discount">
+                        <ng-container *ngIf="c.discountType === 'percentage'">
+                            {{ c.discountValue }}% OFF
+                        </ng-container>
+
+                        <ng-container *ngIf="c.discountType === 'flat'">
+                            ₹{{ c.discountValue }} OFF
+                        </ng-container>
+                    </span>
+                </div>
+
+                <button class="choose-btn" (click)="chooseCoupon(c.code)">
+                    Choose
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+

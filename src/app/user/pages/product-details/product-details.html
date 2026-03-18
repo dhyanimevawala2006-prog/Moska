@@ -1,0 +1,273 @@
+<div class="pd-wrapper" *ngIf="product; else loading">
+
+  <!-- Breadcrumb -->
+  <div class="pd-breadcrumb">
+    <a href="#"><i class="fas fa-home"></i> Home</a>
+    <i class="fas fa-chevron-right"></i>
+    <a href="#">Products</a>
+    <i class="fas fa-chevron-right"></i>
+    <span>{{product.pname}}</span>
+  </div>
+
+  <div class="pd-main">
+
+    <!-- LEFT: Image Gallery -->
+    <div class="pd-gallery">
+      <div class="pd-main-image">
+        <img [src]="'http://localhost:3000/uploads/' + displayImage" alt="Product">
+        
+        <!-- <div class="pd-discount-badge">20% OFF</div> -->
+        <div class="pd-wishlist-btn" (click)="toggleWishlist()"
+          [class.wishlisted]="isWishlisted">
+          <i class="fas fa-heart"></i>
+        </div>
+      </div>
+
+      <div class="pd-thumbnails">
+        <div class="pd-thumb" [class.active]="displayImage === product.pic1" (click)="displayImage = product.pic1">
+          <img [src]="'http://localhost:3000/uploads/' + product.pic1" alt="img1">
+        </div>
+        <div class="pd-thumb" [class.active]="displayImage === product.picHover" (click)="displayImage = product.picHover">
+          <img [src]="'http://localhost:3000/uploads/' + product.picHover" alt="img2">
+        </div>
+        <ng-container *ngFor="let colorObj of product.colors">
+          <div class="pd-thumb"
+            *ngIf="colorObj.image && colorObj.image !== 'no-image.jpg'"
+            [class.active]="displayImage === colorObj.image"
+            (click)="selectColor(colorObj)">
+            <img [src]="'http://localhost:3000/uploads/' + colorObj.image" [alt]="colorObj.color">
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- RIGHT: Product Info -->
+    <div class="pd-info">
+
+      <div class="pd-category-tag">{{product.category?.cat_name}}</div>
+      <h1 class="pd-name">{{product.pname}}</h1>
+
+      <!-- Rating Summary -->
+      <div class="pd-rating-row">
+        <div class="pd-stars">
+          <ng-container *ngFor="let s of stars">
+            <i class="fas fa-star"          *ngIf="s <= avgRating"></i>
+            <i class="fas fa-star-half-alt" *ngIf="s > avgRating && s - 0.5 <= avgRating"></i>
+            <i class="far fa-star"          *ngIf="s - 0.5 > avgRating"></i>
+          </ng-container>
+        </div>
+        <span class="pd-rating-val">{{ avgRating || '0.0' }}</span>
+        <span class="pd-rating-count">({{ totalReviews }} reviews)</span>
+      </div>
+
+      <!-- Price -->
+      <div class="pd-price-row">
+        <span class="pd-price">{{product.price}}</span>
+        <span class="pd-old-price">{{product.oldPrice}}</span>
+        <span class="pd-save" *ngIf="product.oldPrice > product.price">Save ₹{{ product.oldPrice - product.price }}</span>
+      </div>
+
+      <!-- Stock -->
+      <div class="pd-stock" [class.in-stock]="product.stock > 0" [class.out-of-stock]="product.stock === 0">
+        <i class="fas" [class.fa-check-circle]="product.stock > 0" [class.fa-times-circle]="product.stock === 0"></i>
+        {{ product.stock > 0 ? 'In Stock (' + product.stock + ' available)' : 'Out of Stock' }}
+      </div>
+
+      <div class="pd-divider"></div>
+
+      <!-- Colors -->
+      <div class="pd-section" *ngIf="product.colors && product.colors.length > 0">
+        <p class="pd-label">Color: <strong>{{selectedColor}}</strong></p>
+        <div class="pd-color-options">
+          <div
+            *ngFor="let colorObj of product.colors"
+            class="pd-color-dot"
+            [class.selected]="selectedColor === (colorObj.color ?? colorObj)"
+            [style.background]="colorObj.color ?? colorObj"
+            [title]="colorObj.color ?? colorObj"
+            (click)="selectColor(colorObj)">
+          </div>
+        </div>
+      </div>
+
+      <!-- Sizes (only for clothes) -->
+      <div class="pd-section" *ngIf="product.sizes && product.sizes.length > 0">
+        <p class="pd-label">Size: <strong>{{ selectedSize || 'Not selected' }}</strong></p>
+        <div class="pd-size-options">
+          <div
+            *ngFor="let size of product.sizes"
+            class="pd-size-chip"
+            [class.selected]="selectedSize === size"
+            (click)="selectedSize = size">
+            {{ size }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantity -->
+      <div class="pd-section">
+        <p class="pd-label">Quantity</p>
+        <div class="pd-qty-control">
+          <button (click)="decreaseQty()"><i class="fas fa-minus"></i></button>
+          <span>{{ quantity }}</span>
+          <button (click)="increaseQty()"><i class="fas fa-plus"></i></button>
+        </div>
+      </div>
+
+      <div class="pd-divider"></div>
+
+      <!-- Action Buttons -->
+      <div class="pd-actions">
+        <button class="btn-cart"
+          (click)="addToCart(product._id)"
+          [disabled]="product.stock === 0"
+          [class.btn-disabled]="product.stock === 0">
+          <i class="fas fa-shopping-cart"></i>
+          {{ product.stock === 0 ? 'Out of Stock' : 'Add to Cart' }}
+        </button>
+        <button class="btn-buy"
+          (click)="buyNow()"
+          [disabled]="product.stock === 0"
+          [class.btn-disabled]="product.stock === 0">
+          <i class="fas fa-bolt"></i>
+          {{ product.stock === 0 ? 'Unavailable' : 'Buy Now' }}
+        </button>
+      </div>
+
+      <!-- Meta -->
+      <div class="pd-meta">
+        <div class="pd-meta-item">
+          <i class="fas fa-truck"></i>
+          <span>Free delivery on orders above ₹500</span>
+        </div>
+        <div class="pd-meta-item">
+          <i class="fas fa-undo"></i>
+          <span>Easy 7-day returns</span>
+        </div>
+        <div class="pd-meta-item">
+          <i class="fas fa-shield-alt"></i>
+          <span>100% secure payments</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="pd-desc-card">
+    <div class="pd-tabs">
+      <button class="pd-tab active">Description</button>
+      
+    </div>
+    <div class="pd-desc-body">
+      <p>{{product.description}}</p>
+      <!-- <ul class="pd-desc-list">
+        <li><i class="fas fa-check"></i> 40-hour battery life with quick charge</li>
+        <li><i class="fas fa-check"></i> Active Noise Cancellation (ANC)</li>
+        <li><i class="fas fa-check"></i> Bluetooth 5.2 with 10m range</li>
+        <li><i class="fas fa-check"></i> Foldable design with carrying case</li>
+        <li><i class="fas fa-check"></i> Built-in microphone for calls</li>
+      </ul> -->
+    </div>
+  </div>
+
+  <!-- Ratings & Reviews -->
+  <div class="pd-reviews-card">
+    <h2 class="pd-section-title">
+      <i class="fas fa-star"></i> Ratings & Reviews
+    </h2>
+
+    <!-- Rating Overview -->
+    <div class="pd-rating-overview">
+      <div class="pd-rating-big">
+        <span class="pd-big-num">{{ avgRating || '0.0' }}</span>
+        <div class="pd-stars lg">
+          <ng-container *ngFor="let s of stars">
+            <i class="fas fa-star"          *ngIf="s <= avgRating"></i>
+            <i class="fas fa-star-half-alt" *ngIf="s > avgRating && s - 0.5 <= avgRating"></i>
+            <i class="far fa-star"          *ngIf="s - 0.5 > avgRating"></i>
+          </ng-container>
+        </div>
+        <span class="pd-total-reviews">{{ totalReviews }} reviews</span>
+      </div>
+
+      <div class="pd-rating-bars">
+        <div class="pd-bar-row" *ngFor="let s of [5,4,3,2,1]">
+          <span>{{ s }} <i class="fas fa-star"></i></span>
+          <div class="pd-bar-track">
+            <div class="pd-bar-fill" [style.width]="getStarPercent(s) + '%'"></div>
+          </div>
+          <span>{{ getStarPercent(s) }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Review Cards -->
+    <div class="pd-review-list">
+      <div class="pd-review-card" *ngFor="let review of reviews">
+        <div class="pd-review-header">
+          <div class="pd-reviewer-avatar">{{ getInitials(review.userName) }}</div>
+          <div class="pd-reviewer-info">
+            <span class="pd-reviewer-name">{{ review.userName }}</span>
+            <span class="pd-review-date">{{ review.createdAt | date:'dd MMM yyyy' }}</span>
+          </div>
+          <div class="pd-review-stars">
+            <ng-container *ngFor="let s of stars">
+              <i [class]="s <= review.rating ? 'fas fa-star' : 'far fa-star'"></i>
+            </ng-container>
+          </div>
+        </div>
+        <p class="pd-review-title" *ngIf="review.title">{{ review.title }}</p>
+        <p class="pd-review-text">{{ review.comment }}</p>
+      </div>
+
+      <div class="pd-no-reviews" *ngIf="reviews.length === 0">
+        <i class="far fa-comment-dots"></i>
+        No reviews yet. Be the first to review!
+      </div>
+    </div>
+
+    <!-- Write Review -->
+    <div class="pd-write-review">
+      <h3>Write a Review</h3>
+
+      <div class="pd-success-msg" *ngIf="submitSuccess">
+        <i class="fas fa-check-circle"></i> Review submitted successfully!
+      </div>
+
+      <input type="text" class="pd-review-input" placeholder="Your name *"
+        [(ngModel)]="newReview.userName">
+
+      <div class="pd-star-select">
+        <span>Your Rating: *</span>
+        <div class="pd-star-input">
+          <i *ngFor="let s of stars"
+            [class]="(hoverRating || newReview.rating) >= s ? 'fas fa-star' : 'far fa-star'"
+            (mouseenter)="hoverRating = s"
+            (mouseleave)="hoverRating = 0"
+            (click)="setRating(s)">
+          </i>
+        </div>
+      </div>
+
+      <input type="text" class="pd-review-input" placeholder="Review title (optional)"
+        [(ngModel)]="newReview.title">
+
+      <textarea class="pd-review-textarea" rows="4"
+        placeholder="Share your experience with this product... *"
+        [(ngModel)]="newReview.comment"></textarea>
+
+      <button class="pd-submit-review" (click)="submitReview()" [disabled]="submitting">
+        <i class="fas fa-paper-plane"></i> {{ submitting ? 'Submitting...' : 'Submit Review' }}
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<ng-template #loading>
+  <div class="pd-loading">
+    <i class="fas fa-spinner fa-spin"></i> Loading product...
+  </div>
+</ng-template>

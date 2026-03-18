@@ -1,0 +1,1417 @@
+﻿/* You can add global styles to this file, and also import other style files */
+
+html {
+    font-size: 13px; /* base: 1rem = 13px */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+app-root {
+    display: block;
+    height: 100%;
+}
+
+/* ===== CSS VARIABLES â€” LIGHT (default) ===== */
+:root {
+    --bg-primary: #F9F6F2;
+    --bg-secondary: #ffffff;
+    --bg-card: #ffffff;
+    --bg-surface: #fdf6ec;
+    --text-primary: #2A2A2A;
+    --text-secondary: #4E3E33;
+    --text-muted: #7A6A5C;
+    --border-color: rgba(155,123,94,0.2);
+    --nav-bg: rgba(255,255,255,0.92);
+    --input-bg: #ffffff;
+    --card-shadow: 0 8px 24px rgba(60,45,35,0.10);
+    --accent: #9B7B5E;
+
+    /* â”€â”€ Type Scale â”€â”€ */
+    --text-xs:   0.72rem;   /* 10.8px â€” labels, badges */
+    --text-sm:   0.85rem;   /* 12.75px â€” captions, hints */
+    --text-base: 1rem;      /* 15px â€” body text */
+    --text-md:   1.07rem;   /* 16px â€” slightly larger body */
+    --text-lg:   1.2rem;    /* 18px â€” card titles, sub-headings */
+    --text-xl:   1.47rem;   /* 22px â€” section sub-titles */
+    --text-2xl:  1.87rem;   /* 28px â€” section headings */
+    --text-3xl:  2.4rem;    /* 36px â€” page headings */
+    --text-4xl:  3.2rem;    /* 48px â€” hero headings */
+}
+
+/* ===== CSS VARIABLES â€” DARK ===== */
+[data-theme="dark"] {
+    --bg-primary: #111111;
+    --bg-secondary: #1a1a1a;
+    --bg-card: #1e1e1e;
+    --bg-surface: #242424;
+    --text-primary: #f0ebe4;
+    --text-secondary: #d4c8bc;
+    --text-muted: #9a8f85;
+    --border-color: rgba(255,255,255,0.08);
+    --nav-bg: rgba(17,17,17,0.96);
+    --input-bg: #2a2a2a;
+    --card-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    --accent: #c4a07a;
+}
+
+/* ===== GLOBAL TYPOGRAPHY ===== */
+h1 { font-size: var(--text-4xl); line-height: 1.15; margin: 0 0 0.5em; }
+h2 { font-size: var(--text-3xl); line-height: 1.2;  margin: 0 0 0.5em; }
+h3 { font-size: var(--text-2xl); line-height: 1.25; margin: 0 0 0.4em; }
+h4 { font-size: var(--text-xl);  line-height: 1.3;  margin: 0 0 0.4em; }
+h5 { font-size: var(--text-lg);  line-height: 1.4;  margin: 0 0 0.3em; }
+h6 { font-size: var(--text-md);  line-height: 1.4;  margin: 0 0 0.3em; }
+p  { font-size: var(--text-base); line-height: 1.7; margin: 0 0 1em; }
+small, .text-sm { font-size: var(--text-sm); }
+label { font-size: var(--text-sm); }
+button, input, textarea, select { font-family: inherit; font-size: var(--text-base); }
+
+/* ===== APPLY DARK THEME GLOBALLY ===== */
+[data-theme="dark"] body {
+    background-color: var(--bg-primary) !important;
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* â”€â”€ UNIVERSAL TEXT: dark text â†’ light on dark bg â”€â”€ */
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3,
+[data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6 {
+    color: var(--text-primary) !important;
+}
+[data-theme="dark"] p, [data-theme="dark"] span, [data-theme="dark"] li,
+[data-theme="dark"] td, [data-theme="dark"] th, [data-theme="dark"] label,
+[data-theme="dark"] small, [data-theme="dark"] a:not(.btn-cart):not(.btn-buy):not(.btn-login):not(.btn-register) {
+    color: var(--text-secondary) !important;
+}
+
+/* â”€â”€ UNIVERSAL BACKGROUNDS: white/light â†’ dark â”€â”€ */
+[data-theme="dark"] section,
+[data-theme="dark"] div:not(.announcement-bar):not(.slide-overlay):not([class*="btn"]):not([class*="badge"]):not([class*="status"]) {
+    background-color: transparent;
+}
+
+/* â”€â”€ SECTIONS & PAGE WRAPPERS â”€â”€ */
+[data-theme="dark"] :host,
+[data-theme="dark"] .store-grid,
+[data-theme="dark"] .products-container,
+[data-theme="dark"] .category-page,
+[data-theme="dark"] .about-container,
+[data-theme="dark"] .orders-page,
+[data-theme="dark"] .wishlist-page,
+[data-theme="dark"] .profile-page,
+[data-theme="dark"] .pd-wrapper,
+[data-theme="dark"] .cart-page,
+[data-theme="dark"] .checkout-page,
+[data-theme="dark"] .contact-main,
+[data-theme="dark"] .team-section,
+[data-theme="dark"] .offers-section,
+[data-theme="dark"] .home-page,
+[data-theme="dark"] .myorder-page {
+    background: var(--bg-primary) !important;
+}
+
+/* â”€â”€ CARDS â”€â”€ */
+[data-theme="dark"] .product-card,
+[data-theme="dark"] .category-card,
+[data-theme="dark"] .order-card,
+[data-theme="dark"] .wish-card,
+[data-theme="dark"] .team-card,
+[data-theme="dark"] .info-card,
+[data-theme="dark"] .action-card,
+[data-theme="dark"] .offer-card,
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .summary-card,
+[data-theme="dark"] .form-side,
+[data-theme="dark"] .cart-item,
+[data-theme="dark"] .pd-desc-card,
+[data-theme="dark"] .pd-reviews-card,
+[data-theme="dark"] .pd-review-card,
+[data-theme="dark"] .coupon-card,
+[data-theme="dark"] .checkout-card,
+[data-theme="dark"] .address-card,
+[data-theme="dark"] .payment-card,
+[data-theme="dark"] .profile-info-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+/* â”€â”€ PRODUCT CARD IMAGE AREA â”€â”€ */
+[data-theme="dark"] .product-info,
+[data-theme="dark"] .img-container,
+[data-theme="dark"] .product-img-wrap {
+    background: var(--bg-surface) !important;
+}
+
+/* â”€â”€ INPUTS â”€â”€ */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+    background: var(--input-bg) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* â”€â”€ NAV â”€â”€ */
+[data-theme="dark"] .main-header {
+    background: var(--nav-bg) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+}
+[data-theme="dark"] .nav-menu a { color: var(--text-secondary) !important; }
+[data-theme="dark"] .logo { color: var(--text-primary) !important; }
+[data-theme="dark"] .profile-dropdown {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] .profile-dropdown a,
+[data-theme="dark"] .profile-dropdown button {
+    color: var(--text-primary) !important;
+    background: transparent !important;
+}
+[data-theme="dark"] .profile-dropdown a:hover,
+[data-theme="dark"] .profile-dropdown button:hover {
+    background: var(--bg-surface) !important;
+}
+[data-theme="dark"] .announcement-bar { background: #1a1a1a !important; }
+
+/* ── HEADER BUTTONS — dark mode ── */
+[data-theme="dark"] .btn-login {
+    background: linear-gradient(135deg, #9B7B5E, #C5A059) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 14px rgba(197,160,89,0.25) !important;
+    border: none !important;
+}
+[data-theme="dark"] .btn-login:hover {
+    background: linear-gradient(135deg, #C5A059, #9B7B5E) !important;
+    box-shadow: 0 6px 18px rgba(197,160,89,0.4) !important;
+}
+[data-theme="dark"] .btn-register {
+    background: rgba(197,160,89,0.12) !important;
+    color: #C5A059 !important;
+    border: 1px solid rgba(197,160,89,0.4) !important;
+}
+[data-theme="dark"] .btn-register:hover {
+    background: rgba(197,160,89,0.22) !important;
+    border-color: #C5A059 !important;
+    color: #f0e8e0 !important;
+}
+[data-theme="dark"] .theme-toggle-btn {
+    background: rgba(255,255,255,0.06) !important;
+    color: #C5A059 !important;
+    border-color: rgba(197,160,89,0.3) !important;
+}
+
+/* â”€â”€ HERO SECTIONS (keep dark bg, fix text) â”€â”€ */
+[data-theme="dark"] .contact-hero,
+[data-theme="dark"] .hero-section,
+[data-theme="dark"] .about-hero,
+[data-theme="dark"] .category-hero {
+    background: linear-gradient(135deg, #1a1410 0%, #2a1f18 60%, #3d2e22 100%) !important;
+}
+[data-theme="dark"] .contact-hero h1,
+[data-theme="dark"] .hero-section h1 { color: #f0e8e0 !important; }
+
+/* â”€â”€ INFO SIDE (contact left col) â”€â”€ */
+[data-theme="dark"] .info-side { background: transparent !important; }
+[data-theme="dark"] .info-icon {
+    background: rgba(197,160,89,0.15) !important;
+    color: var(--accent) !important;
+}
+
+/* â”€â”€ ACCENT COLORS â€” keep gold/brown â”€â”€ */
+[data-theme="dark"] .price, [data-theme="dark"] .pd-price,
+[data-theme="dark"] .item-price, [data-theme="dark"] .total-amt,
+[data-theme="dark"] .grand-total, [data-theme="dark"] .amount,
+[data-theme="dark"] .currency { color: #c4a07a !important; }
+
+[data-theme="dark"] .category-tag, [data-theme="dark"] .pd-category-tag,
+[data-theme="dark"] .offer-code, [data-theme="dark"] .section-label,
+[data-theme="dark"] .hero-tag, [data-theme="dark"] .role { color: var(--accent) !important; }
+
+/* â”€â”€ STATUS BADGES â”€â”€ */
+[data-theme="dark"] .status-badge.delivered,
+[data-theme="dark"] .badge.success { background: rgba(95,165,90,0.15) !important; color: #6dbf67 !important; }
+[data-theme="dark"] .status-badge.cancelled,
+[data-theme="dark"] .badge.danger  { background: rgba(200,90,84,0.15) !important; color: #e07070 !important; }
+[data-theme="dark"] .status-badge.pending,
+[data-theme="dark"] .badge.warning { background: rgba(197,160,89,0.15) !important; color: #c4a07a !important; }
+[data-theme="dark"] .status-badge.shipped,
+[data-theme="dark"] .badge.info    { background: rgba(89,130,197,0.15) !important; color: #7aabdf !important; }
+
+/* â”€â”€ PAYMENT BADGE â”€â”€ */
+[data-theme="dark"] .payment-badge { opacity: 0.9; }
+
+/* â”€â”€ DIVIDERS â”€â”€ */
+[data-theme="dark"] hr,
+[data-theme="dark"] .summary-divider,
+[data-theme="dark"] .divider { border-color: var(--border-color) !important; }
+
+/* â”€â”€ FOOTER â”€â”€ */
+[data-theme="dark"] .moska-footer { background: #0a0a0a !important; }
+[data-theme="dark"] .footer-brand p,
+[data-theme="dark"] .footer-col ul li a,
+[data-theme="dark"] .footer-bottom { color: #9a8f85 !important; }
+[data-theme="dark"] .footer-col h4 { color: var(--text-primary) !important; }
+
+/* â”€â”€ CART SPECIFIC â”€â”€ */
+[data-theme="dark"] .cart-labels span,
+[data-theme="dark"] .breadcrumb-bar span,
+[data-theme="dark"] .cart-page-header h1,
+[data-theme="dark"] .cart-page-header p { color: var(--text-primary) !important; }
+[data-theme="dark"] .qty-control {
+    background: var(--bg-surface) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] .qty-control button { color: var(--text-primary) !important; background: transparent !important; }
+[data-theme="dark"] .coupon-applied { color: #6dbf67 !important; }
+[data-theme="dark"] .trust-item { color: var(--text-muted) !important; }
+
+/* â”€â”€ CHECKOUT â”€â”€ */
+[data-theme="dark"] .checkout-page { background: var(--bg-primary) !important; }
+[data-theme="dark"] .order-summary-card,
+[data-theme="dark"] .checkout-form-card { background: var(--bg-card) !important; border-color: var(--border-color) !important; }
+[data-theme="dark"] .delivery-hint { color: var(--text-muted) !important; }
+
+/* â”€â”€ PROFILE â”€â”€ */
+[data-theme="dark"] .profile-card { color: #fff !important; }
+[data-theme="dark"] .username, [data-theme="dark"] .email { color: #fff !important; }
+
+/* â”€â”€ SEARCH BAR â”€â”€ */
+[data-theme="dark"] .search-bar-wrap,
+[data-theme="dark"] .search-wrapper {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* â”€â”€ SLIDE OVERLAY (hero carousel) â”€â”€ */
+[data-theme="dark"] .slide-overlay {
+    background: linear-gradient(90deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 80%) !important;
+}
+[data-theme="dark"] .slide-overlay h2,
+[data-theme="dark"] .slide-overlay p { color: #f0e8e0 !important; }
+
+/* â”€â”€ COUPON MODAL â”€â”€ */
+[data-theme="dark"] .coupon-modal {
+    background: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+}
+[data-theme="dark"] .coupon-modal-bg { background: rgba(0,0,0,0.7) !important; }
+
+/* â”€â”€ ABOUT PAGE â”€â”€ */
+[data-theme="dark"] .about-section,
+[data-theme="dark"] .feature-card { background: var(--bg-card) !important; border-color: var(--border-color) !important; }
+[data-theme="dark"] .feature-icon { background: rgba(197,160,89,0.15) !important; }
+
+/* â”€â”€ CATEGORY PAGE â”€â”€ */
+[data-theme="dark"] .category-section { background: var(--bg-primary) !important; }
+
+/* â”€â”€ PRODUCT DETAILS â”€â”€ */
+[data-theme="dark"] .pd-main,
+[data-theme="dark"] .pd-image-section { background: var(--bg-card) !important; }
+[data-theme="dark"] .pd-thumb { border-color: var(--border-color) !important; background: var(--bg-surface) !important; }
+[data-theme="dark"] .pd-thumb.active { border-color: var(--accent) !important; }
+
+/* â”€â”€ MYORDER â”€â”€ */
+[data-theme="dark"] .order-header,
+[data-theme="dark"] .order-item,
+[data-theme="dark"] .order-footer { background: var(--bg-surface) !important; border-color: var(--border-color) !important; }
+
+/* â”€â”€ WISHLIST â”€â”€ */
+[data-theme="dark"] .wish-info h4 { color: var(--text-primary) !important; }
+
+/* â”€â”€ CONTACT FORM â”€â”€ */
+[data-theme="dark"] .contact-main { background: linear-gradient(135deg, #1a1410, #221a14) !important; }
+[data-theme="dark"] .form-side { background: var(--bg-card) !important; }
+[data-theme="dark"] .info-desc, [data-theme="dark"] .info-item p,
+[data-theme="dark"] .info-item h4 { color: var(--text-secondary) !important; }
+
+/* â”€â”€ THEME TOGGLE BUTTON â”€â”€ */
+[data-theme="dark"] .theme-toggle-btn {
+    background: rgba(255,255,255,0.08) !important;
+    color: #f0c060 !important;
+    border-color: rgba(255,255,255,0.15) !important;
+}
+
+
+/* ============================================================
+   MOSKA â€” GLOBAL CLASSY ANIMATIONS
+   Applies to entire website without touching individual files
+   ============================================================ */
+
+/* â”€â”€ 1. PAGE ENTRY: fade + slide up on load â”€â”€ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(197,160,89,0); }
+  50%       { box-shadow: 0 0 0 8px rgba(197,160,89,0.18); }
+}
+@keyframes heartBeat {
+  0%   { transform: scale(1); }
+  14%  { transform: scale(1.25); }
+  28%  { transform: scale(1); }
+  42%  { transform: scale(1.18); }
+  70%  { transform: scale(1); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+@keyframes spinOnce {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+@keyframes ripple {
+  0%   { transform: scale(0); opacity: 0.5; }
+  100% { transform: scale(4); opacity: 0; }
+}
+@keyframes borderGlow {
+  0%, 100% { border-color: rgba(197,160,89,0.3); }
+  50%       { border-color: rgba(197,160,89,0.9); }
+}
+
+/* â”€â”€ 2. SCROLL-REVEAL via Intersection Observer class â”€â”€ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+              transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+              transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+              transform 0.65s cubic-bezier(0.4,0,0.2,1);
+}
+.reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+/* â”€â”€ 3. PRODUCT CARDS â€” lift + shadow on hover â”€â”€ */
+.product-card {
+  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.4s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.product-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 24px 48px -12px rgba(60,45,35,0.22) !important;
+}
+
+/* â”€â”€ 4. CATEGORY CARDS â”€â”€ */
+.category-card {
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.35s ease,
+              border-color 0.25s ease !important;
+}
+.category-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+}
+
+/* â”€â”€ 5. OFFER CARDS â€” float animation â”€â”€ */
+.offer-card {
+  animation: floatY 4s ease-in-out infinite;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.offer-card:nth-child(2) { animation-delay: 0.6s; }
+.offer-card:nth-child(3) { animation-delay: 1.2s; }
+.offer-card:nth-child(4) { animation-delay: 1.8s; }
+.offer-card:hover {
+  animation-play-state: paused;
+  transform: translateY(-10px) scale(1.03) !important;
+  box-shadow: 0 20px 40px -10px rgba(90,70,50,0.28) !important;
+}
+
+/* â”€â”€ 6. BUTTONS â€” smooth press + glow â”€â”€ */
+.btn-checkout,
+.btn-cart,
+.btn-buy,
+.btn-send,
+.btn-primary,
+.btn-login,
+.btn-update,
+.pd-submit-review,
+.add-product-btn-primary {
+  transition: transform 0.2s ease,
+              box-shadow 0.2s ease,
+              background 0.25s ease !important;
+  position: relative;
+  overflow: hidden;
+}
+.btn-checkout:hover,
+.btn-cart:hover,
+.btn-send:hover,
+.btn-primary:hover,
+.btn-update:hover,
+.pd-submit-review:hover,
+.add-product-btn-primary:hover {
+  transform: translateY(-3px) !important;
+}
+.btn-checkout:active,
+.btn-cart:active,
+.btn-send:active,
+.btn-primary:active {
+  transform: translateY(0) scale(0.97) !important;
+}
+
+/* Ripple on click */
+.btn-checkout::after,
+.btn-cart::after,
+.btn-send::after {
+  content: '';
+  position: absolute;
+  width: 20px; height: 20px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%) scale(0);
+  pointer-events: none;
+}
+.btn-checkout:active::after,
+.btn-cart:active::after,
+.btn-send:active::after {
+  animation: ripple 0.5s ease-out forwards;
+}
+
+/* â”€â”€ 7. WISHLIST HEART â€” heartbeat on activate â”€â”€ */
+.wish-btn.active,
+.pd-wishlist-btn.wishlisted {
+  animation: heartBeat 0.7s ease-in-out !important;
+}
+.wish-btn:hover {
+  transform: scale(1.18) !important;
+}
+
+/* â”€â”€ 8. NAV LINKS â€” underline slide â”€â”€ */
+.nav-menu a {
+  position: relative;
+  overflow: hidden;
+}
+.nav-menu a::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 0; height: 1.5px;
+  background: #9B7B5E;
+  transition: width 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.nav-menu a:hover::after,
+.nav-menu a.active::after {
+  width: 100%;
+}
+
+/* â”€â”€ 9. LOGO â€” subtle hover scale â”€â”€ */
+.logo, .footer-logo {
+  transition: transform 0.3s ease, letter-spacing 0.3s ease !important;
+  display: inline-block;
+}
+.logo:hover {
+  transform: scale(1.04) !important;
+  letter-spacing: 6px !important;
+}
+
+/* â”€â”€ 10. INPUTS â€” focus glow â”€â”€ */
+input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="file"]),
+textarea,
+select {
+  transition: border-color 0.25s ease,
+              box-shadow 0.25s ease,
+              background 0.2s ease !important;
+}
+input:not([type="checkbox"]):focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.18) !important;
+}
+
+/* â”€â”€ 11. CART ITEMS â€” hover lift â”€â”€ */
+.cart-item {
+  transition: transform 0.25s ease, box-shadow 0.25s ease,
+              border-color 0.2s ease !important;
+}
+.cart-item:hover {
+  transform: translateY(-3px) !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 16px 40px rgba(155,123,94,0.2) !important;
+}
+
+/* â”€â”€ 12. ORDER CARDS â”€â”€ */
+.order-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.order-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 18px 40px rgba(60,45,35,0.18) !important;
+}
+
+/* â”€â”€ 13. WISH CARDS â”€â”€ */
+.wish-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.wish-card:hover {
+  transform: translateY(-6px) scale(1.02) !important;
+  box-shadow: 0 18px 36px rgba(60,45,35,0.18) !important;
+}
+
+/* â”€â”€ 14. TEAM CARDS (contact page) â”€â”€ */
+.team-card {
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1),
+              box-shadow 0.35s ease !important;
+}
+.team-card:hover {
+  transform: translateY(-10px) !important;
+  box-shadow: 0 28px 50px -12px rgba(60,45,35,0.25) !important;
+}
+
+/* â”€â”€ 15. SOCIAL ICONS â”€â”€ */
+.social-icons a,
+.social-links a,
+.social-row a {
+  transition: transform 0.25s ease,
+              background 0.25s ease,
+              color 0.25s ease !important;
+}
+.social-icons a:hover,
+.social-links a:hover,
+.social-row a:hover {
+  transform: translateY(-5px) rotate(-5deg) !important;
+}
+
+/* â”€â”€ 16. PROFILE DROPDOWN â€” slide down â”€â”€ */
+.profile-dropdown {
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease !important;
+}
+.profile-dropdown:not(.show) {
+  opacity: 0;
+  transform: scale(0.95) translateY(-8px);
+  pointer-events: none;
+}
+.profile-dropdown.show {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}
+
+/* â”€â”€ 17. STAT CARDS (admin dashboard) â”€â”€ */
+.stat-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+.stat-card:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 16px 32px rgba(101,67,33,0.18) !important;
+}
+
+/* â”€â”€ 18. ADMIN SIDEBAR NAV ITEMS â”€â”€ */
+.nav-item {
+  transition: background 0.2s ease, transform 0.2s ease,
+              padding-left 0.2s ease !important;
+}
+.nav-item:hover {
+  padding-left: 18px !important;
+  background: rgba(255,255,255,0.1) !important;
+}
+
+/* â”€â”€ 19. FOOTER LINKS â€” slide right â”€â”€ */
+.footer-col ul li a {
+  transition: color 0.2s ease, transform 0.2s ease !important;
+  display: inline-block;
+}
+.footer-col ul li a:hover {
+  transform: translateX(8px) !important;
+  color: #C5A059 !important;
+}
+
+/* â”€â”€ 20. PAGE WRAPPER ENTRY ANIMATIONS â”€â”€ */
+.login-wrapper,
+.login-card {
+  animation: scaleIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.cart-page {
+  animation: fadeUp 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.orders-page,
+.wishlist-page,
+.profile-page {
+  animation: fadeUp 0.45s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+.pd-wrapper {
+  animation: fadeIn 0.4s ease both;
+}
+
+.pd-main {
+  animation: scaleIn 0.45s cubic-bezier(0.4,0,0.2,1) 0.1s both;
+}
+
+.contact-hero {
+  animation: fadeIn 0.6s ease both;
+}
+
+.team-card:nth-child(1) { animation: fadeUp 0.5s ease 0.1s both; }
+.team-card:nth-child(2) { animation: fadeUp 0.5s ease 0.2s both; }
+.team-card:nth-child(3) { animation: fadeUp 0.5s ease 0.3s both; }
+
+/* â”€â”€ 21. PRODUCT GRID STAGGER â”€â”€ */
+.grid-layout .product-card:nth-child(1)  { animation: fadeUp 0.4s ease 0.05s both; }
+.grid-layout .product-card:nth-child(2)  { animation: fadeUp 0.4s ease 0.10s both; }
+.grid-layout .product-card:nth-child(3)  { animation: fadeUp 0.4s ease 0.15s both; }
+.grid-layout .product-card:nth-child(4)  { animation: fadeUp 0.4s ease 0.20s both; }
+.grid-layout .product-card:nth-child(5)  { animation: fadeUp 0.4s ease 0.25s both; }
+.grid-layout .product-card:nth-child(6)  { animation: fadeUp 0.4s ease 0.30s both; }
+.grid-layout .product-card:nth-child(7)  { animation: fadeUp 0.4s ease 0.35s both; }
+.grid-layout .product-card:nth-child(8)  { animation: fadeUp 0.4s ease 0.40s both; }
+.grid-layout .product-card:nth-child(9)  { animation: fadeUp 0.4s ease 0.45s both; }
+.grid-layout .product-card:nth-child(10) { animation: fadeUp 0.4s ease 0.50s both; }
+
+/* â”€â”€ 22. CATEGORY GRID STAGGER â”€â”€ */
+.category-grid .category-card:nth-child(1) { animation: scaleIn 0.4s ease 0.05s both; }
+.category-grid .category-card:nth-child(2) { animation: scaleIn 0.4s ease 0.12s both; }
+.category-grid .category-card:nth-child(3) { animation: scaleIn 0.4s ease 0.19s both; }
+.category-grid .category-card:nth-child(4) { animation: scaleIn 0.4s ease 0.26s both; }
+.category-grid .category-card:nth-child(5) { animation: scaleIn 0.4s ease 0.33s both; }
+.category-grid .category-card:nth-child(6) { animation: scaleIn 0.4s ease 0.40s both; }
+
+/* â”€â”€ 23. ORDER CARDS STAGGER â”€â”€ */
+.order-card:nth-child(1) { animation: slideInLeft 0.4s ease 0.05s both; }
+.order-card:nth-child(2) { animation: slideInLeft 0.4s ease 0.12s both; }
+.order-card:nth-child(3) { animation: slideInLeft 0.4s ease 0.19s both; }
+.order-card:nth-child(4) { animation: slideInLeft 0.4s ease 0.26s both; }
+.order-card:nth-child(5) { animation: slideInLeft 0.4s ease 0.33s both; }
+
+/* â”€â”€ 24. CART ITEMS STAGGER â”€â”€ */
+.cart-item:nth-child(1) { animation: fadeUp 0.35s ease 0.05s both; }
+.cart-item:nth-child(2) { animation: fadeUp 0.35s ease 0.12s both; }
+.cart-item:nth-child(3) { animation: fadeUp 0.35s ease 0.19s both; }
+.cart-item:nth-child(4) { animation: fadeUp 0.35s ease 0.26s both; }
+
+/* â”€â”€ 25. SUMMARY CARD â€” slide in from right â”€â”€ */
+.summary-card,
+.summary-col {
+  animation: slideInRight 0.5s cubic-bezier(0.4,0,0.2,1) 0.15s both;
+}
+
+/* â”€â”€ 26. HERO CAROUSEL TEXT â€” fade up â”€â”€ */
+.slide-overlay h2 {
+  animation: fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+}
+.slide-overlay p {
+  animation: fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.5s both;
+}
+.shop-now-btn {
+  animation: fadeUp 0.8s cubic-bezier(0.4,0,0.2,1) 0.7s both;
+}
+
+/* â”€â”€ 27. SECTION INTRO â€” fade up â”€â”€ */
+.section-intro h2 {
+  animation: fadeUp 0.5s ease 0.1s both;
+}
+.section-intro p {
+  animation: fadeUp 0.5s ease 0.2s both;
+}
+
+/* â”€â”€ 28. PROFILE CARD â€” scale in â”€â”€ */
+.profile-card {
+  animation: scaleIn 0.5s cubic-bezier(0.4,0,0.2,1) both;
+}
+.info-card {
+  animation: fadeUp 0.45s ease 0.15s both;
+}
+.action-cards {
+  animation: fadeUp 0.45s ease 0.25s both;
+}
+
+/* â”€â”€ 29. ADMIN CARDS â”€â”€ */
+.ec-card,
+.add-product-group {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+.ec-card:hover,
+.add-product-group:hover {
+  transform: translateY(-3px) !important;
+}
+
+/* â”€â”€ 30. THUMBNAIL HOVER (product details) â”€â”€ */
+.pd-thumb {
+  transition: transform 0.2s ease, border-color 0.2s ease,
+              box-shadow 0.2s ease !important;
+}
+.pd-thumb:hover {
+  transform: scale(1.08) !important;
+}
+
+/* â”€â”€ 31. REVIEW CARDS â”€â”€ */
+.pd-review-card {
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+  animation: fadeUp 0.4s ease both;
+}
+.pd-review-card:hover {
+  transform: translateY(-3px) !important;
+}
+
+/* â”€â”€ 32. CHATBOT ICON â€” pulse â”€â”€ */
+.chatbot-icon {
+  animation: pulseGold 2.5s ease-in-out infinite !important;
+  transition: transform 0.2s ease !important;
+}
+.chatbot-icon:hover {
+  transform: scale(1.12) rotate(8deg) !important;
+  animation-play-state: paused !important;
+}
+
+/* â”€â”€ 33. PAYMENT OPTIONS â”€â”€ */
+.payment-option {
+  transition: transform 0.2s ease, box-shadow 0.2s ease,
+              border-color 0.2s ease !important;
+}
+.payment-option:hover {
+  transform: translateY(-2px) !important;
+}
+
+/* â”€â”€ 34. COUPON MODAL â€” scale in â”€â”€ */
+.coupon-modal {
+  animation: scaleIn 0.3s cubic-bezier(0.4,0,0.2,1) both !important;
+}
+
+/* â”€â”€ 35. SEARCH BAR â€” focus expand â”€â”€ */
+.search-bar-wrap,
+.search-wrapper {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease,
+              transform 0.2s ease !important;
+}
+.search-bar-wrap:focus-within,
+.search-wrapper:focus-within {
+  transform: scaleX(1.02) !important;
+}
+
+/* â”€â”€ 36. STATUS BADGES â€” pulse on pending â”€â”€ */
+.status-badge.pending {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* â”€â”€ 37. EMPTY STATE ICONS â€” float â”€â”€ */
+.empty-icon,
+.empty-state i,
+.pd-no-reviews i {
+  animation: floatY 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+/* â”€â”€ 38. FOOTER SOCIAL â€” spin on hover â”€â”€ */
+.social-icons a:hover i,
+.social-links a:hover i {
+  animation: spinOnce 0.4s ease;
+}
+
+/* â”€â”€ 39. ADMIN SIDEBAR LOGO â”€â”€ */
+.sidebar-logo {
+  animation: slideInLeft 0.5s ease both;
+}
+
+/* â”€â”€ 40. REDUCE MOTION â€” accessibility â”€â”€ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   MOSKA â€” SweetAlert2 Custom Theme
+   ============================================================ */
+
+/* Import Playfair for popup title */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&display=swap');
+
+.moska-swal-popup {
+  border-radius: 28px !important;
+  padding: 36px 32px 28px !important;
+  background: #FFFDF9 !important;
+  border: 1px solid rgba(155,123,94,0.18) !important;
+  box-shadow: 0 32px 80px -12px rgba(60,40,20,0.22),
+              0 0 0 1px rgba(197,160,89,0.08) !important;
+  font-family: 'Montserrat', sans-serif !important;
+  max-width: 420px !important;
+}
+
+/* Entry animation */
+.moska-swal-show {
+  animation: moskaSwalIn 0.38s cubic-bezier(0.34,1.56,0.64,1) both !important;
+}
+.moska-swal-hide {
+  animation: moskaSwalOut 0.22s ease-in both !important;
+}
+@keyframes moskaSwalIn {
+  from { opacity: 0; transform: scale(0.82) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes moskaSwalOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.9) translateY(10px); }
+}
+
+/* Title */
+.moska-swal-title {
+  font-family: 'Playfair Display', serif !important;
+  font-size: 22px !important;
+  font-weight: 500 !important;
+  color: #2C2420 !important;
+  margin-bottom: 6px !important;
+  line-height: 1.3 !important;
+}
+
+/* Body text */
+.moska-swal-text {
+  font-size: 13.5px !important;
+  color: #7A6A5C !important;
+  line-height: 1.7 !important;
+}
+
+/* Icon â€” smaller, centered */
+.moska-swal-icon {
+  margin: 0 auto 18px !important;
+  width: 58px !important;
+  height: 58px !important;
+  border-width: 2px !important;
+}
+
+/* Confirm button */
+.moska-swal-confirm {
+  background: linear-gradient(135deg, #9B7B5E, #C5A059) !important;
+  color: #fff !important;
+  border: none !important;
+  padding: 11px 30px !important;
+  border-radius: 50px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase !important;
+  font-family: 'Montserrat', sans-serif !important;
+  cursor: pointer !important;
+  transition: all 0.25s ease !important;
+  box-shadow: 0 6px 18px rgba(155,123,94,0.35) !important;
+}
+.moska-swal-confirm:hover {
+  background: linear-gradient(135deg, #8a6b4f, #d4af6a) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 24px rgba(155,123,94,0.45) !important;
+}
+.moska-swal-confirm:active {
+  transform: translateY(0) scale(0.97) !important;
+}
+
+/* Cancel button */
+.moska-swal-cancel {
+  background: #F4EFE9 !important;
+  color: #9B7B5E !important;
+  border: 1.5px solid rgba(155,123,94,0.3) !important;
+  padding: 11px 28px !important;
+  border-radius: 50px !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 1.2px !important;
+  text-transform: uppercase !important;
+  font-family: 'Montserrat', sans-serif !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.moska-swal-cancel:hover {
+  background: #EDE6DC !important;
+  border-color: #9B7B5E !important;
+}
+
+/* Actions row spacing */
+.swal2-actions {
+  gap: 12px !important;
+  margin-top: 24px !important;
+}
+
+/* Toast style */
+.swal2-toast.moska-swal-popup {
+  border-radius: 16px !important;
+  padding: 14px 20px !important;
+  max-width: 340px !important;
+  box-shadow: 0 8px 28px rgba(60,40,20,0.18) !important;
+}
+.swal2-toast .moska-swal-title {
+  font-size: 14px !important;
+}
+.swal2-toast .moska-swal-text {
+  font-size: 12px !important;
+}
+
+/* Timer progress bar */
+.swal2-timer-progress-bar {
+  background: linear-gradient(90deg, #9B7B5E, #C5A059) !important;
+  height: 3px !important;
+  border-radius: 0 0 28px 28px !important;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] .moska-swal-popup {
+  background: #1e1e1e !important;
+  border-color: rgba(197,160,89,0.15) !important;
+  box-shadow: 0 32px 80px -12px rgba(0,0,0,0.5) !important;
+}
+[data-theme="dark"] .moska-swal-title { color: #f0ebe4 !important; }
+[data-theme="dark"] .moska-swal-text  { color: #9a8f85 !important; }
+[data-theme="dark"] .moska-swal-cancel {
+  background: #2a2a2a !important;
+  color: #c4a07a !important;
+  border-color: rgba(197,160,89,0.25) !important;
+}
+[data-theme="dark"] .moska-swal-cancel:hover { background: #333 !important; }
+[data-theme="dark"] .swal2-timer-progress-bar { background: linear-gradient(90deg, #7a5c3e, #c4a07a) !important; }
+
+/* â”€â”€ ADMIN SETTINGS CARD â”€â”€ */
+.settings-card {
+  animation: fadeUp 0.4s cubic-bezier(0.4,0,0.2,1) both;
+}
+
+/* â”€â”€ ADMIN DASHBOARD STAT CARDS STAGGER â”€â”€ */
+.dash-stat:nth-child(1) { animation: fadeUp 0.4s ease 0.05s both; }
+.dash-stat:nth-child(2) { animation: fadeUp 0.4s ease 0.12s both; }
+.dash-stat:nth-child(3) { animation: fadeUp 0.4s ease 0.19s both; }
+.dash-stat:nth-child(4) { animation: fadeUp 0.4s ease 0.26s both; }
+
+/* â”€â”€ NOTIFICATION DROPDOWN â”€â”€ */
+.notif-dropdown {
+  animation: scaleIn 0.22s cubic-bezier(0.4,0,0.2,1) both;
+  transform-origin: top right;
+}
+
+/* â”€â”€ ADMIN DROPDOWN â”€â”€ */
+.admin-dropdown {
+  animation: scaleIn 0.22s cubic-bezier(0.4,0,0.2,1) both;
+  transform-origin: top right;
+}
+
+/* â”€â”€ TABLE ROWS STAGGER â”€â”€ */
+table tbody tr {
+  animation: fadeUp 0.3s ease both;
+}
+table tbody tr:nth-child(1)  { animation-delay: 0.03s; }
+table tbody tr:nth-child(2)  { animation-delay: 0.07s; }
+table tbody tr:nth-child(3)  { animation-delay: 0.11s; }
+table tbody tr:nth-child(4)  { animation-delay: 0.15s; }
+table tbody tr:nth-child(5)  { animation-delay: 0.19s; }
+table tbody tr:nth-child(6)  { animation-delay: 0.23s; }
+table tbody tr:nth-child(7)  { animation-delay: 0.27s; }
+table tbody tr:nth-child(8)  { animation-delay: 0.31s; }
+
+/* â”€â”€ COUPON CARDS STAGGER â”€â”€ */
+.coupon-card:nth-child(1) { animation: scaleIn 0.35s ease 0.05s both; }
+.coupon-card:nth-child(2) { animation: scaleIn 0.35s ease 0.12s both; }
+.coupon-card:nth-child(3) { animation: scaleIn 0.35s ease 0.19s both; }
+.coupon-card:nth-child(4) { animation: scaleIn 0.35s ease 0.26s both; }
+.coupon-card:nth-child(5) { animation: scaleIn 0.35s ease 0.33s both; }
+
+/* â”€â”€ SMOOTH PAGE SCROLL â”€â”€ */
+html { scroll-behavior: smooth; }
+
+/* â”€â”€ LINK HOVER â€” color transition â”€â”€ */
+a { transition: color 0.2s ease, opacity 0.2s ease; }
+
+/* â”€â”€ IMAGE HOVER â€” subtle zoom â”€â”€ */
+.product-card img,
+.wish-card img,
+.pd-main-img {
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.product-card:hover img,
+.wish-card:hover img {
+  transform: scale(1.07) !important;
+}
+
+/* â”€â”€ BADGE PULSE (new items) â”€â”€ */
+.badge-new {
+  animation: pulseGold 2s ease-in-out infinite;
+}
+
+/* â”€â”€ SKELETON SHIMMER (loading states) â”€â”€ */
+.skeleton {
+  background: linear-gradient(90deg,
+    rgba(200,180,160,0.15) 25%,
+    rgba(200,180,160,0.35) 50%,
+    rgba(200,180,160,0.15) 75%);
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite linear;
+  border-radius: 8px;
+}
+
+
+
+/* ============================================================
+   MOSKA — ADVANCED USER-SIDE ANIMATIONS (Level 2)
+   ============================================================ */
+
+/* ── HERO CAROUSEL — Ken Burns effect ── */
+@keyframes kenBurns {
+  0%   { transform: scale(1.08) translateX(0); }
+  100% { transform: scale(1) translateX(-10px); }
+}
+.carousel-slide.active img {
+  animation: kenBurns 6s ease-out forwards !important;
+}
+.carousel-slide.active .slide-overlay h2 {
+  animation: fadeUp 0.9s cubic-bezier(0.4,0,0.2,1) 0.2s both !important;
+}
+.carousel-slide.active .slide-overlay p {
+  animation: fadeUp 0.9s cubic-bezier(0.4,0,0.2,1) 0.45s both !important;
+}
+.carousel-slide.active .shop-now-btn {
+  animation: fadeUp 0.9s cubic-bezier(0.4,0,0.2,1) 0.65s both !important;
+}
+
+/* ── SHOP NOW BUTTON — shimmer sweep ── */
+@keyframes shimmerSweep {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.shop-now-btn:hover {
+  background: linear-gradient(90deg, rgba(255,255,255,0.85), rgba(255,255,255,1), rgba(255,255,255,0.85)) !important;
+  background-size: 200% auto !important;
+  animation: shimmerSweep 1.2s linear infinite !important;
+  color: #2A2A2A !important;
+}
+
+/* ── OFFER CARDS — shimmer border glow ── */
+@keyframes borderShimmer {
+  0%, 100% { border-color: rgba(155,123,94,0.2); box-shadow: 0 12px 28px -12px rgba(90,70,50,0.2); }
+  50%       { border-color: rgba(197,160,89,0.7); box-shadow: 0 16px 36px -8px rgba(197,160,89,0.35); }
+}
+.offer-card {
+  animation: floatY 4s ease-in-out infinite, borderShimmer 3s ease-in-out infinite !important;
+}
+.offer-card:nth-child(2) { animation-delay: 0.6s, 0.8s !important; }
+.offer-card:nth-child(3) { animation-delay: 1.2s, 1.6s !important; }
+.offer-card:nth-child(4) { animation-delay: 1.8s, 2.4s !important; }
+.offer-card:hover {
+  animation-play-state: paused !important;
+  transform: translateY(-10px) scale(1.03) !important;
+}
+.offer-code {
+  transition: all 0.3s ease !important;
+  cursor: pointer;
+}
+.offer-card:hover .offer-code {
+  background: rgba(197,160,89,0.18) !important;
+  letter-spacing: 1.5px !important;
+}
+
+/* ── PRODUCT CARD — 3D tilt ── */
+.product-card {
+  transform-style: preserve-3d;
+  perspective: 800px;
+}
+.product-card:hover {
+  transform: translateY(-12px) rotateX(2deg) !important;
+}
+.product-card:hover .img-container {
+  border-radius: 100px 100px 0 0 !important;
+}
+.add-to-cart-btn {
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1), background 0.3s !important;
+}
+
+/* ── WISHLIST HEART — magnetic pop ── */
+.wish-btn {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), color 0.2s !important;
+}
+.wish-btn:hover { transform: scale(1.3) !important; }
+.wish-btn.active {
+  animation: heartBeat 0.6s ease-in-out !important;
+  color: #e05c5c !important;
+}
+
+/* ── CATEGORY CARDS — spring scale ── */
+.category-card {
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.4s ease, border-color 0.3s ease !important;
+}
+.category-card:hover {
+  transform: translateY(-10px) scale(1.03) !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 24px 48px -10px rgba(90,70,50,0.3) !important;
+}
+.category-img img {
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.category-card:hover .category-img img {
+  transform: scale(1.1) !important;
+}
+
+/* ── NAV LINKS — letter spacing on hover ── */
+.nav-menu a {
+  transition: color 0.25s ease, letter-spacing 0.25s ease !important;
+}
+.nav-menu a:hover { letter-spacing: 1.5px !important; }
+
+/* ── LOGO — gold shimmer ── */
+@keyframes logoShimmer {
+  0%, 100% { color: #4E3E33; }
+  50%       { color: #C5A059; }
+}
+.logo:hover {
+  animation: logoShimmer 1s ease-in-out !important;
+  transform: scale(1.04) !important;
+}
+
+/* ── HEADER — glass on scroll ── */
+.main-header {
+  transition: box-shadow 0.3s ease, backdrop-filter 0.3s ease !important;
+}
+.main-header.scrolled {
+  box-shadow: 0 8px 32px rgba(60,45,35,0.12) !important;
+  backdrop-filter: blur(20px) !important;
+}
+
+/* ── PROFILE DROPDOWN — spring ── */
+.profile-dropdown {
+  transform-origin: top right;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.34,1.56,0.64,1) !important;
+}
+.profile-dropdown:not(.show) {
+  opacity: 0 !important;
+  transform: scale(0.88) translateY(-12px) !important;
+  pointer-events: none !important;
+}
+.profile-dropdown.show {
+  opacity: 1 !important;
+  transform: scale(1) translateY(0) !important;
+}
+
+/* ── CART ITEMS — slide in ── */
+.cart-item { animation: slideInLeft 0.4s cubic-bezier(0.4,0,0.2,1) both; }
+.cart-item:nth-child(1) { animation-delay: 0.05s; }
+.cart-item:nth-child(2) { animation-delay: 0.12s; }
+.cart-item:nth-child(3) { animation-delay: 0.19s; }
+.cart-item:nth-child(4) { animation-delay: 0.26s; }
+.cart-item:nth-child(5) { animation-delay: 0.33s; }
+
+/* ── QTY BUTTONS — bounce press ── */
+.qty-control button {
+  transition: transform 0.15s cubic-bezier(0.34,1.56,0.64,1), background 0.2s ease !important;
+}
+.qty-control button:active { transform: scale(0.82) !important; }
+
+/* ── CHECKOUT BUTTON — gold sweep ── */
+@keyframes goldSweep {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+.btn-checkout {
+  background-size: 200% auto !important;
+  transition: background-position 0.4s ease, transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+.btn-checkout:hover {
+  background: linear-gradient(135deg, #9b7b5e, #c5a059, #9b7b5e) !important;
+  background-size: 200% auto !important;
+  animation: goldSweep 1.5s linear infinite !important;
+  transform: translateY(-3px) !important;
+}
+
+/* ── PRODUCT DETAILS — image zoom ── */
+.pd-main-image img {
+  transition: transform 0.6s cubic-bezier(0.4,0,0.2,1) !important;
+}
+.pd-main-image:hover img { transform: scale(1.07) !important; }
+
+/* ── PD THUMBNAILS — spring bounce ── */
+.pd-thumb {
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+              border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+.pd-thumb:hover { transform: scale(1.12) translateY(-3px) !important; }
+
+/* ── PD BUTTONS — lift ── */
+.btn-cart, .btn-buy {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease !important;
+  overflow: hidden;
+  position: relative;
+}
+.btn-cart:hover { transform: translateY(-4px) !important; }
+.btn-buy:hover  { transform: translateY(-4px) !important; }
+
+/* ── REVIEW CARDS — stagger ── */
+.pd-review-card:nth-child(1) { animation: fadeUp 0.4s ease 0.05s both; }
+.pd-review-card:nth-child(2) { animation: fadeUp 0.4s ease 0.12s both; }
+.pd-review-card:nth-child(3) { animation: fadeUp 0.4s ease 0.19s both; }
+.pd-review-card:nth-child(4) { animation: fadeUp 0.4s ease 0.26s both; }
+
+/* ── STAR RATING — bounce ── */
+.pd-star-input i {
+  transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), color 0.15s !important;
+}
+.pd-star-input i:hover { transform: scale(1.35) rotate(-5deg) !important; }
+
+/* ── SECTION HEADINGS — underline draw ── */
+@keyframes underlineDraw {
+  from { width: 0; }
+  to   { width: 65px; }
+}
+.category-section h2::after,
+.section-intro h2::after {
+  animation: underlineDraw 0.6s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+}
+
+/* ── ANNOUNCEMENT BAR — pause on hover ── */
+.announcement-bar:hover .marquee-content {
+  animation-play-state: paused !important;
+}
+
+/* ── FOOTER LINKS — indent slide ── */
+.footer-col ul li a {
+  transition: color 0.25s ease, padding-left 0.25s ease !important;
+}
+.footer-col ul li a:hover {
+  padding-left: 8px !important;
+  color: #C5A059 !important;
+}
+
+/* ── SOCIAL ICONS — rotate + lift ── */
+.social-icons a, .social-links a {
+  transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1),
+              background 0.25s ease, color 0.25s ease !important;
+}
+.social-icons a:hover, .social-links a:hover {
+  transform: translateY(-6px) rotate(-8deg) scale(1.1) !important;
+}
+
+/* ── ABOUT PAGE — float images ── */
+.circle-image-wrapper { animation: floatY 5s ease-in-out infinite !important; }
+.square-float-image   { animation: floatY 5s ease-in-out 1.5s infinite !important; }
+
+/* ── ABOUT TITLE — letter spacing reveal ── */
+@keyframes titleReveal {
+  from { opacity: 0; letter-spacing: 12px; }
+  to   { opacity: 1; letter-spacing: normal; }
+}
+.title-serif { animation: titleReveal 0.9s cubic-bezier(0.4,0,0.2,1) both !important; }
+
+/* ── WISHLIST CARDS — spring ── */
+.wish-card {
+  transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.4s ease !important;
+}
+.wish-card:hover {
+  transform: translateY(-10px) scale(1.02) !important;
+  box-shadow: 0 24px 48px rgba(60,45,35,0.2) !important;
+}
+
+/* ── ORDER CARDS — slide + glow ── */
+.order-card {
+  transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.35s ease, border-color 0.25s ease !important;
+}
+.order-card:hover {
+  transform: translateY(-6px) !important;
+  border-color: #C5A059 !important;
+  box-shadow: 0 20px 44px rgba(60,45,35,0.2) !important;
+}
+
+/* ── PROFILE CARD — glow border ── */
+.profile-card {
+  animation: scaleIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both !important;
+  transition: box-shadow 0.3s ease !important;
+}
+.profile-card:hover {
+  box-shadow: 0 0 0 3px rgba(197,160,89,0.3), 0 20px 40px rgba(60,45,35,0.15) !important;
+}
+
+/* ── SEARCH BAR — focus glow ── */
+.product-search {
+  transition: box-shadow 0.25s ease, border-color 0.25s ease !important;
+}
+.product-search:focus {
+  box-shadow: 0 6px 20px rgba(197,160,89,0.2) !important;
+  border-color: #C5A059 !important;
+}
+
+/* ── CHATBOT — magnetic float ── */
+@keyframes chatbotFloat {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25%       { transform: translateY(-6px) rotate(3deg); }
+  75%       { transform: translateY(-3px) rotate(-2deg); }
+}
+.chatbot-icon { animation: chatbotFloat 3s ease-in-out infinite !important; }
+.chatbot-icon:hover {
+  animation: none !important;
+  transform: scale(1.15) rotate(10deg) !important;
+}
+
+/* ── SUBMIT BUTTON — gold pulse ── */
+.submit-btn {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease !important;
+}
+.submit-btn:hover {
+  transform: translateY(-4px) scale(1.02) !important;
+  box-shadow: 0 18px 36px -8px rgba(197,160,89,0.45) !important;
+}
+
+/* ── PAGE ENTRY ── */
+@keyframes pageSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.home-page, .cart-page, .orders-page,
+.wishlist-page, .profile-page, .pd-wrapper,
+.checkout-page, .contact-main, .about-container {
+  animation: pageSlideIn 0.5s cubic-bezier(0.4,0,0.2,1) both !important;
+}
+
+/* ── REDUCE MOTION — accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

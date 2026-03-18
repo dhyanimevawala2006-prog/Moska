@@ -1,0 +1,79 @@
+<div class="admin-orders">
+
+    <div class="page-header">
+        <h2>All Orders</h2>
+        <span class="order-count">{{ orders.length }} total</span>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="text" placeholder="Search by customer name or email..." [(ngModel)]="searchText">
+    </div>
+
+    <!-- EMPTY -->
+    <div *ngIf="filteredOrders.length === 0" class="empty-state">
+        <p>No orders found.</p>
+    </div>
+
+    <!-- ORDER CARDS -->
+    <div class="order-card" *ngFor="let order of filteredOrders; let i = index">
+
+        <!-- HEADER -->
+        <div class="order-header">
+            <div class="order-meta">
+                <span class="order-num">Order {{ i + 1 }}</span>
+                <span class="order-id">{{ order._id }}</span>
+            </div>
+            <div class="header-right">
+                <!-- Customer Name -->
+                <div class="customer-badge" *ngIf="order.userId?.name">
+                    <i class="fa-solid fa-user"></i>
+                    {{ order.userId?.name }}
+                </div>
+                <!-- Status -->
+                <select class="status-select" [(ngModel)]="order.status" (change)="updateStatus(order._id, order.status)">
+                    <option>Pending</option>
+                    <option>Preparing</option>
+                    <option>Shipped</option>
+                    <option>Out for Delivery</option>
+                    <option>Delivered</option>
+                    <option>Cancelled</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- ITEMS -->
+        <div class="order-items">
+            <div class="order-item" *ngFor="let item of order.items">
+                <img [src]="imageUrl + item.productId?.pic1"
+                     [alt]="item.productId?.pname"
+                     onerror="this.src='https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=80'">
+                <div class="item-info">
+                    <h4>{{ item.productId?.pname }}</h4>
+                    <p>{{ item.productId?.description }}</p>
+                    <span>Qty: {{ item.quantity }}</span>
+                </div>
+                <div class="item-price">₹{{ item.productId?.price * item.quantity }}</div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="order-footer">
+            <div class="customer-info">
+                <span *ngIf="order.userId?.email">
+                    <i class="fa-solid fa-envelope"></i> {{ order.userId?.email }}
+                </span>
+                <span *ngIf="order.address?.phone">
+                    <i class="fa-solid fa-phone"></i> {{ order.address?.phone }}
+                </span>
+            </div>
+            <div class="totals">
+                <span *ngIf="order.discount > 0" class="discount">−₹{{ order.discount }}</span>
+                <span class="total">Total: ₹{{ order.finalTotal || order.total }}</span>
+            </div>
+        </div>
+
+    </div>
+
+</div>

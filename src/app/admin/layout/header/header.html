@@ -1,0 +1,102 @@
+<header class="admin-header">
+  <div class="header-container">
+    <div class="header-top">
+
+      <!-- LEFT -->
+      <div class="logo-area">
+        <div class="logo">
+          <i class="fas fa-basket-shopping"></i>
+          <span>estore<span class="logo-sub">admin</span></span>
+        </div>
+        <div class="logo-badge">
+          <i class="fas fa-crown"></i> master control
+        </div>
+      </div>
+
+      <!-- CENTER -->
+      <!-- <div class="header-center">
+        <a class="admin-login-link" routerLink="/admin/login">
+          <i class="fas fa-sign-in-alt"></i> Admin Login
+        </a>
+      </div> -->
+
+      <!-- RIGHT -->
+       
+      <div class="header-actions">
+
+        <!-- Bell -->
+        <div class="notif-wrapper">
+          <div class="action-icon" (click)="toggleNotif()">
+            <i class="fas fa-bell"></i>
+            <span class="badge" *ngIf="unreadCount > 0">
+              {{ unreadCount > 99 ? '99+' : unreadCount }}
+            </span>
+          </div>
+          <div class="notif-dropdown" *ngIf="notifOpen">
+            <div class="notif-header">
+              <span><i class="fas fa-bell"></i> Notifications</span>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span class="notif-count">{{ unreadCount }} new</span>
+                <button class="notif-clear-all" (click)="clearAll($event)" *ngIf="notifications.length > 0">
+                  Clear All
+                </button>
+              </div>
+            </div>
+            <div class="notif-list">
+              <div class="notif-empty" *ngIf="notifications.length === 0">
+                <i class="fas fa-check-circle"></i> All caught up!
+              </div>
+              <div class="notif-item" *ngFor="let n of notifications; let i = index"
+                   [style.background]="getNotifBg(n.type)">
+                <div class="notif-icon"
+                     [style.background]="n.color + '22'"
+                     [style.color]="n.color">
+                  <i class="fas {{ n.icon }}"></i>
+                </div>
+                <div class="notif-body">
+                  <div class="notif-title">{{ n.title }}</div>
+                  <div class="notif-msg">{{ n.message }}</div>
+                  <div class="notif-time">{{ n.time | date:'dd MMM, hh:mm a' }}</div>
+                </div>
+                <button class="notif-delete" (click)="deleteNotif(i, $event)" title="Remove">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cog -->
+        <div class="action-icon" routerLink="/admin/settings" title="Settings">
+          <i class="fas fa-cog"></i>
+        </div>
+
+        <!-- Profile -->
+        <div class="user-profile" (click)="toggleDropdown()">
+          <div class="user-avatar">
+            <i class="fas fa-user-shield"></i>
+          </div>
+          <div class="user-info">
+            <div class="user-name">{{ adminName }} <i class="fas fa-circle"></i></div>
+            <div class="user-role">super admin</div>
+          </div>
+          <i class="fas fa-chevron-down" style="color:#a88872;font-size:0.8rem;"></i>
+          <div class="admin-dropdown" *ngIf="dropdownOpen">
+            <div class="dropdown-info">
+              <i class="fas fa-user-circle"></i>
+              <div>
+                <div class="d-name">{{ adminName }}</div>
+                <div class="d-email">{{ adminEmail }}</div>
+              </div>
+            </div>
+            <hr style="border-color:#e8dfd0;margin:8px 0;">
+            <button class="dropdown-logout" (click)="logout()">
+              <i class="fas fa-sign-out-alt"></i> Logout
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</header>

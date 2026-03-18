@@ -1,0 +1,92 @@
+<div class="estore-container">
+  <!-- Main Card -->
+  <div class="estore-card">
+    <!-- Card Header -->
+    <div class="estore-card-header">
+      <i class="fas fa-tags"></i>
+      <span>Add New Category</span>
+    </div>
+
+    <!-- Card Body -->
+    <div class="estore-card-body">
+      <form [formGroup]="frmGrp" (ngSubmit)="onsubmit()">
+        <!-- Category Name Field -->
+        <div class="estore-form-group">
+          <label class="estore-label">
+            <i class="fas fa-tag"></i>
+            Category Name
+          </label>
+          <input
+            type="text"
+            class="estore-input"
+            formControlName="cat_name"
+            placeholder="Enter category name"
+          />
+          <app-validation-message
+            [control]="frmGrp.get('cat_name')">
+          </app-validation-message>
+        </div>
+
+        <!-- Category Image Field -->
+        <div class="estore-form-group">
+          <label class="estore-label">
+            <i class="fas fa-image"></i>
+            Category Image
+          </label>
+          <input
+            type="file"
+            class="estore-input"
+            (change)="onFileChange($event)"
+            accept="image/*"
+          />
+          <app-validation-message
+            [control]="frmGrp.get('cat_pic')">
+          </app-validation-message>
+        </div>
+
+        <!-- E-Store Categories Display (All 7) -->
+        <div class="estore-categories">
+          <span class="estore-category-chip">
+            <i class="fas fa-tshirt"></i> clothes
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-microchip"></i> electronics
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-capsules"></i> medical
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-gem"></i> jewellery
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-puzzle-piece"></i> toys
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-lamp"></i> decor
+          </span>
+          <span class="estore-category-chip">
+            <i class="fas fa-spray-can-sparkles"></i> beauty
+          </span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="estore-actions">
+          <button 
+            type="submit" 
+            class="estore-btn estore-btn-primary"
+            [disabled]="frmGrp.invalid">
+            <i class="fas fa-plus-circle"></i>
+            Add Category
+          </button>
+          
+          <a 
+            routerLink="/admin/category" 
+            class="estore-btn estore-btn-secondary">
+            <i class="fas fa-arrow-left"></i>
+            Back
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

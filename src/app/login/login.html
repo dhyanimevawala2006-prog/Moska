@@ -1,0 +1,57 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Store · Login</title>
+   
+</head>
+<body>
+
+<div class="login-wrapper">
+<div class="login-card">
+    <!-- left side: image + FreshCart title (preserved, but added a small organic line) -->
+    <div class="left-visual">
+        <div class="visual-content">
+            <h1>E-Store</h1>
+            <p>shop smart • shop online</p>
+        </div>
+    </div>
+
+    <!-- right side: exactly #DCEDC8 form with all required fields -->
+    <div class="right-form">
+        <div class="form-header">
+            <h2>welcome back</h2>
+            <p>Login to manage your orders</p>
+        </div>
+
+        <!-- form with same structure, but action left as # (static demo) -->
+        <form [formGroup]="frmGrp" (ngSubmit)="onsubmit()">
+            <div class="input-group">
+                <label for="username">Email</label>
+                <input formControlName="email" type="email" id="username" name="username" placeholder="e.g., fresh.customer@example.com" required>
+                <app-validation-message [control]="frmGrp.get('email')"></app-validation-message>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input formControlName="password" type="password" id="password" name="password" placeholder="••••••" required>
+                <app-validation-message [control]="frmGrp.get('password')"></app-validation-message>
+            </div>
+
+            <div class="forgot-pass">
+                <a routerLink="/forgot-password">forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn-login">Login Now</button>
+        </form>
+
+        <!-- registration link -->
+        <div class="register-link" style="text-align: center; margin-top: 1rem;">
+            Don't have an account? <a routerLink="/register" style="text-decoration: none; font-weight: 500;">Register here</a>
+        </div>
+    </div>
+</div>
+</div>

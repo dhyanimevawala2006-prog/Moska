@@ -1,0 +1,196 @@
+<div class="show-product-container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <h2>
+      <i class="fas fa-box"></i>
+      Products Management
+    </h2>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input 
+        type="text" 
+        [(ngModel)]="searchTerm" 
+        placeholder="Search by name or category..."
+      >
+    </div>
+    
+    <!-- Add Button -->
+    <a routerLink="/admin/addproduct" class="btn-add">
+      <i class="fas fa-plus-circle"></i>
+      Add Product
+    </a>
+  </div>
+
+  <!-- Loading State -->
+  <!-- <div class="loading-container" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading products...</p>
+  </div> -->
+
+  <!-- Table Card -->
+  <div class="table-card">
+    <div class="table-responsive">
+      <table class="products-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Images</th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Old Price</th>
+            <th>Stock</th>
+            <th>Description</th>
+            <th>Colors</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          <!-- Debug Info - Always show -->
+          <!-- <tr style="background: #ffeb3b; font-weight: bold;">
+            <td colspan="9" style="padding: 15px; text-align: center;">
+              🔍 DEBUG: products.length = {{ products.length }} | 
+              filteredProducts() = {{ filteredProducts().length }} |
+              isLoading = {{ isLoading }}
+            </td>
+          </tr>
+           -->
+          <tr *ngFor="let p of filteredProducts(); let i = index">
+            <td class="serial-number">{{ i + 1 }}</td>
+            
+            <!-- Images -->
+            <td>
+              <div class="product-images">
+                <img 
+                  [src]="'http://localhost:3000/uploads/' + p.pic1" 
+                  class="image-thumb" 
+                  title="Main Image"
+                  (click)="viewImage(p.pic1)"
+                  alt="Main"
+                >
+                <img 
+                  [src]="'http://localhost:3000/uploads/' + p.picHover" 
+                  class="image-thumb" 
+                  title="Hover Image"
+                  (click)="viewImage(p.picHover)"
+                  alt="Hover"
+                >
+              </div>
+            </td>
+            
+            <!-- Product Name -->
+            <td>
+              <div class="product-info">
+                <i class="fas fa-box"></i>
+                <span>{{ p.pname }}</span>
+              </div>
+            </td>
+            
+            <!-- Category -->
+            <td>
+              <span class="category-badge">
+                <i [class]="'fas fa-' + getCategoryIcon(p.category)"></i>
+                {{ p.category?.cat_name || 'N/A' }}
+              </span>
+            </td>
+            
+            <!-- Price -->
+            <td class="price">₹{{ p.price }}</td>
+            
+            <!-- Old Price -->
+            <td class="old-price">
+              <span *ngIf="p.oldPrice && p.oldPrice > 0">₹{{ p.oldPrice }}</span>
+              <span *ngIf="!p.oldPrice || p.oldPrice === 0">-</span>
+            </td>
+            
+            <!-- Stock -->
+            <td>
+              <span class="stock" [class.low]="p.stock < 10">
+                <i class="fas fa-boxes"></i>
+                {{ p.stock }}
+              </span>
+            </td>
+            
+            <!-- Description -->
+            <td>
+              <div class="description-cell">
+                {{ p.description | slice:0:50 }}{{ p.description?.length > 50 ? '...' : '' }}
+              </div>
+            </td>
+            
+            <!-- Colors -->
+            <td>
+              <div class="color-dots" *ngIf="p.colors && p.colors.length > 0">
+                <span 
+                  class="color-dot" 
+                  *ngFor="let color of p.colors"
+                  [style.background-color]="color"
+                  [title]="color"
+                ></span>
+              </div>
+              <span *ngIf="!p.colors || p.colors.length === 0">-</span>
+            </td>
+            
+            <!-- Actions -->
+            <td>
+              <div class="action-buttons">
+                <!-- <button class="btn-action btn-view" (click)="viewProduct(p._id)" title="View">
+                  <i class="fas fa-eye"></i>
+                </button> -->
+                <button class="btn-action btn-edit" (click)="editProduct(p._id)" title="Edit">
+                  <i class="fas fa-pencil-alt"></i>
+                </button>
+                <button class="btn-action btn-delete" (click)="deleteProduct(p._id)" title="Delete">
+                  <i class="fas fa-trash-alt"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty State -->
+          <tr *ngIf="filteredProducts().length === 0">
+            <td colspan="10">
+              <div class="empty-state">
+                <i class="fas fa-box-open"></i>
+                <h3>No Products Found</h3>
+                <p *ngIf="searchTerm">No products match your search criteria.</p>
+                <p *ngIf="!searchTerm">You haven't added any products yet.</p>
+                <a routerLink="/admin/addproduct" class="btn-add">
+                  <i class="fas fa-plus-circle"></i> Add Your First Product
+                </a>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Summary Stats -->
+  <div class="summary-stats" *ngIf="products.length > 0">
+    <div class="stat-card">
+      <i class="fas fa-box"></i>
+      <div>
+        <h4>Total Products</h4>
+        <p>{{ products.length }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="fas fa-boxes"></i>
+      <div>
+        <h4>Total Stock</h4>
+        <p>{{ getTotalStock() }}</p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <i class="fas fa-rupee-sign"></i>
+      <div>
+        <h4>Avg Price</h4>
+        <p>₹{{ getAveragePrice() }}</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,189 @@
+<div class="checkout-page">
+
+  <!-- BREADCRUMB -->
+  <div class="breadcrumb-bar">
+    <a routerLink="/">Home</a>
+    <span class="sep">›</span>
+    <a routerLink="/cart">Cart</a>
+    <span class="sep">›</span>
+    <span class="active">Checkout</span>
+  </div>
+
+  <!-- HEADER -->
+  <div class="checkout-header">
+    <h1>Checkout</h1>
+    <p>Review your order and fill in delivery details</p>
+  </div>
+
+  <div class="checkout-layout">
+
+    <!-- LEFT: FORM -->
+    <div class="checkout-form-col">
+
+      <!-- SHIPPING DETAILS -->
+      <div class="form-section">
+        <div class="section-badge">01</div>
+        <h2 class="section-title">Delivery Details</h2>
+
+        <div class="form-grid">
+
+          <div class="form-group full-width">
+            <label>Full Name <span class="req">*</span></label>
+            <div class="input-wrap">
+              <i class="fas fa-user input-icon"></i>
+              <input type="text" [(ngModel)]="form.name" placeholder="Enter your full name" />
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Delivery Address <span class="req">*</span></label>
+            <div class="input-wrap">
+              <i class="fas fa-map-marker-alt input-icon"></i>
+              <textarea [(ngModel)]="form.address" rows="3"
+                placeholder="House no., Street, Area, Landmark..."></textarea>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>City <span class="req">*</span></label>
+            <div class="input-wrap">
+              <i class="fas fa-city input-icon"></i>
+              <input type="text" [(ngModel)]="form.city" placeholder="City" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>State <span class="req">*</span></label>
+            <div class="input-wrap select-wrap">
+              <i class="fas fa-map input-icon"></i>
+              <select [(ngModel)]="form.state">
+                <option value="" disabled>Select State</option>
+                <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Pincode</label>
+            <div class="input-wrap">
+              <i class="fas fa-hashtag input-icon"></i>
+              <input type="text" [(ngModel)]="form.pincode" placeholder="6-digit pincode" maxlength="6" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PAYMENT METHOD -->
+      <div class="form-section">
+        <div class="section-badge">02</div>
+        <h2 class="section-title">Payment Method</h2>
+
+        <div class="payment-options">
+
+          <div class="payment-option" [class.selected]="pmode === 'cod'" (click)="pmode = 'cod'">
+            <div class="payment-icon">💵</div>
+            <div class="payment-info">
+              <span class="payment-title">Cash on Delivery</span>
+              <span class="payment-sub">Pay when you receive</span>
+            </div>
+            <div class="payment-radio" [class.active]="pmode === 'cod'"></div>
+          </div>
+
+          <div class="payment-option" [class.selected]="pmode === 'online'" (click)="pmode = 'online'">
+            <div class="payment-icon">💳</div>
+            <div class="payment-info">
+              <span class="payment-title">Online Payment</span>
+              <span class="payment-sub">UPI · Card · Net Banking</span>
+            </div>
+            <div class="payment-radio" [class.active]="pmode === 'online'"></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="summary-col">
+
+      <div class="summary-card">
+        <h3>Order Summary</h3>
+
+        <!-- PRODUCT LIST -->
+        <div class="order-items">
+          <div class="order-item" *ngFor="let item of cartItems">
+            <div class="order-item-img">
+              <img [src]="imageUrl + (item.displayImage || item.productId.pic1)" [alt]="item.productId.pname" />
+              <span class="qty-badge">{{ item.quantity }}</span>
+            </div>
+            <div class="order-item-info">
+              <p class="order-item-cat">{{ item.productId.category?.cat_name }}</p>
+              <h4>{{ item.productId.pname }}</h4>
+              <div class="order-item-variants">
+                <span *ngIf="item.color" class="variant-tag">
+                  <span class="color-swatch" [style.background]="item.color"></span>
+                  {{ item.color }}
+                </span>
+                <span *ngIf="item.size" class="variant-tag">Size: {{ item.size }}</span>
+              </div>
+            </div>
+            <div class="order-item-price">₹{{ item.productId.price * item.quantity }}</div>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <!-- PRICE BREAKDOWN -->
+        <div class="summary-rows">
+          <div class="summary-row">
+            <span>Subtotal</span>
+            <span>₹{{ total }}</span>
+          </div>
+          <div class="summary-row discount-row" *ngIf="discount > 0">
+            <span>Discount ({{ couponCode }})</span>
+            <span>− ₹{{ discount }}</span>
+          </div>
+          <div class="summary-row delivery-row">
+            <span>
+              Delivery
+              <span class="free-tag" *ngIf="deliveryCharge === 0 && form.city">FREE</span>
+            </span>
+            <span [class.free-amt]="deliveryCharge === 0">
+              {{ deliveryCharge === 0 ? '₹0' : '₹' + deliveryCharge }}
+            </span>
+          </div>
+          <div class="city-delivery-hint" *ngIf="form.city">
+            <span *ngIf="deliveryCharge === 0">🎉 Free delivery to {{ form.city }}!</span>
+            <span *ngIf="deliveryCharge > 0 && deliveryCharge <= 40">🚚 Standard delivery to {{ form.city }}</span>
+            <span *ngIf="deliveryCharge > 40 && deliveryCharge <= 80">📦 Delivery to {{ form.city }}</span>
+            <span *ngIf="deliveryCharge > 80">🏔️ Remote area — higher delivery charge</span>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span class="total-amt">₹{{ grandTotal }}</span>
+        </div>
+
+        <!-- PLACE ORDER BUTTON -->
+        <button class="btn-place-order" (click)="placeOrder()" [disabled]="!isFormValid()">
+          <span *ngIf="pmode === 'cod'">Place Order →</span>
+          <span *ngIf="pmode === 'online'">Pay ₹{{ grandTotal }} →</span>
+        </button>
+
+        <div class="trust-row">
+          <div class="trust-item">🔒 Secure</div>
+          <div class="trust-item">🚚 Fast Delivery</div>
+          <div class="trust-item">↩ Easy Returns</div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

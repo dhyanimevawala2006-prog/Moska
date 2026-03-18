@@ -1,0 +1,151 @@
+<div class="cart-message" id="cartMessage">✨ Item added to cart</div>
+
+<!-- ANNOUNCEMENT BAR -->
+
+
+<!-- HERO CAROUSEL (FIXED) -->
+
+<div class="hero-carousel" id="heroCarousel">
+    <div class="carousel-slides">
+        <div class="carousel-slide active">
+            <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?q=80&w=2070&auto=format&fit=crop"
+                alt="Fashion">
+            <div class="slide-overlay">
+                <h2>Autumn Edit</h2>
+                <p>Curated clothes & beauty • new arrivals</p>
+                <a href="#" class="shop-now-btn">shop now →</a>
+            </div>
+        </div>
+        <div class="carousel-slide">
+            <img src="https://i.pinimg.com/1200x/48/df/46/48df46a4ad1fbb705f3e97b1df219913.jpg
+" alt="Tech & Decor">
+            <div class="slide-overlay">
+                <h2>Smart Living</h2>
+                <p>Electronics • minimal decor • innovation</p>
+                <a href="#" class="shop-now-btn">explore →</a>
+            </div>
+        </div>
+        <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=2070&auto=format&fit=crop"
+                alt="Jewellery">
+            <div class="slide-overlay">
+                <h2>Timeless Adorn</h2>
+                <p>Jewellery • wellness essentials • self-care</p>
+                <a href="#" class="shop-now-btn">discover →</a>
+            </div>
+        </div>
+        <div class="carousel-slide">
+            <img src="https://images.unsplash.com/photo-1558877385-81a1c7e67d72?q=80&w=2070&auto=format&fit=crop"
+                alt="Toys & Gifts">
+            <div class="slide-overlay">
+                <h2>Joy Forever</h2>
+                <p>Toys • decor • gift sets for all ages</p>
+                <a href="#" class="shop-now-btn">view gifts →</a>
+            </div>
+        </div>
+    </div>
+    <div class="carousel-nav">
+        <span class="carousel-dot active" data-index="0"></span>
+        <span class="carousel-dot" data-index="1"></span>
+        <span class="carousel-dot" data-index="2"></span>
+        <span class="carousel-dot" data-index="3"></span>
+    </div>
+</div>
+
+<!-- OFFERS ROW -->
+<section class="offers-section reveal">
+    <h3>special offers</h3>
+    <div class="offers-row">
+
+        <div class="offer-card" *ngFor="let c of coupons" (click)="copyCoupon(c.code)">
+
+            <span class="offer-badge">
+                {{c.discountType === 'percentage' ? c.discountValue + '%' : '₹'+c.discountValue}} off
+            </span>
+
+            <h4>{{c.title}}</h4>
+
+            <p>{{c.description}}</p>
+
+            <span class="offer-code">{{c.code}}</span>
+
+        </div>
+
+    </div>
+</section>
+
+<!-- ===== COMPACT CREATIVE CATEGORY SECTION ===== -->
+
+
+<!-- PRODUCT SECTION with fully clickable ADD TO CART buttons -->
+<section class="store-grid reveal">
+    <div class="store-grid-inner">
+        <div class="section-intro">
+            <h2>Premium Collection</h2>
+            <p>Curated excellence for your daily lifestyle.</p>
+            <div class="search-sort-row">
+                <div class="search-bar-wrap">
+                    <span class="search-icon">🔍</span>
+                    <input
+                        type="text"
+                        class="product-search"
+                        placeholder="Search products..."
+                        [(ngModel)]="searchQuery"
+                    />
+                    <button class="search-clear" *ngIf="searchQuery" (click)="searchQuery=''">✕</button>
+                </div>
+                <select class="sort-select" [(ngModel)]="sortBy">
+                    <option value="default">Sort: Default</option>
+                    <option value="price-asc">Price: Low → High</option>
+                    <option value="price-desc">Price: High → Low</option>
+                    <option value="name-asc">Name: A → Z</option>
+                    <option value="name-desc">Name: Z → A</option>
+                </select>
+            </div>
+        </div>
+        <p class="search-result-count" *ngIf="searchQuery">
+            {{ filteredProducts.length }} result{{ filteredProducts.length !== 1 ? 's' : '' }} for "{{ searchQuery }}"
+        </p>
+        <div class="grid-layout">
+            <div class="ex-card" *ngFor="let p of filteredProducts">
+                <div class="ex-img-wrap">
+                    <img [src]="'http://localhost:3000/uploads/'+p.pic1" class="ex-img-main" [alt]="p.pname">
+                    <img [src]="'http://localhost:3000/uploads/'+p.picHover" class="ex-img-hover" [alt]="p.pname">
+                    <div class="ex-overlay">
+                        <a (click)="navigateToDetails($event, p)" class="ex-view-btn" style="cursor:pointer">View Details</a>
+                    </div>
+                </div>
+                <button class="ex-wish-btn" (click)="toggleWishlist($event, p._id)"
+                    [ngClass]="{'active': isWishlisted(p._id)}">
+                    <i class="fas fa-heart"></i>
+                </button>
+                <div class="ex-info">
+                    <span class="ex-cat">{{ p.category?.cat_name }}</span>
+                    <h3 class="ex-name">{{ p.pname }}</h3>
+                    <!-- Color dots -->
+                    <div class="ex-color-dots" *ngIf="p.colors && p.colors.length > 0">
+                        <span
+                            *ngFor="let c of p.colors"
+                            class="ex-color-dot"
+                            [style.background]="c.color ?? c"
+                            [class.active]="selectedColors[p._id] === (c.color ?? c)"
+                            (click)="selectColor($event, p._id, c)"
+                            [title]="c.color ?? c">
+                        </span>
+                    </div>
+                    <div class="ex-price-row">
+                        <span class="ex-price">₹{{ p.price }}</span>
+                        <button class="ex-cart-btn" (click)="addToCart($event, p)">
+                            <i class="fas fa-shopping-bag"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<app-chatbot />
+<!-- footer -->
+<!-- ===== PROFESSIONAL CREATIVE FOOTER (MATCHES CATEGORY STYLE) ===== -->
