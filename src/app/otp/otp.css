@@ -2,65 +2,152 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
-  background: #f6f8f3;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f0e8 0%, #e8dfd0 100%);
+  padding: 1.5rem;
 }
 
 .otp-card {
-  background: white;
-  padding: 40px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  padding: 48px 44px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(60, 45, 35, 0.15);
   text-align: center;
-  width: 360px;
+  width: 420px;
+  max-width: 100%;
+  border: 1px solid rgba(155, 123, 94, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+/* decorative top bar */
+.otp-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #9B7B5E, #C5A059, #9B7B5E);
+}
+
+/* lock icon area */
+.otp-icon {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, rgba(155,123,94,0.12), rgba(197,160,89,0.18));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 26px;
+  border: 1.5px solid rgba(197,160,89,0.3);
 }
 
 .otp-card h2 {
-  color: #2d6a4f;
+  font-family: 'Playfair Display', serif;
+  color: #2C2420;
+  font-size: 1.9rem;
+  font-weight: 600;
   margin-bottom: 8px;
+  letter-spacing: -0.02em;
 }
 
 .otp-card p {
-  color: #777;
-  font-size: 14px;
-  margin-bottom: 25px;
+  color: #7A6A5C;
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+  line-height: 1.6;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .otp-inputs {
   display: flex;
   justify-content: center;
-  gap: 12px;
-  margin-bottom: 25px;
+  gap: 14px;
+  margin-bottom: 28px;
 }
 
 .otp-inputs input {
-  width: 50px;
-  height: 55px;
-  font-size: 22px;
+  width: 58px;
+  height: 64px;
+  font-size: 24px;
+  font-weight: 700;
   text-align: center;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 2px solid rgba(155, 123, 94, 0.25);
+  border-radius: 16px;
   outline: none;
-  transition: 0.2s;
+  background: #fdf9f4;
+  color: #2C2420;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(60,45,35,0.05);
 }
 
 .otp-inputs input:focus {
-  border-color: #2d6a4f;
-  box-shadow: 0 0 0 2px rgba(45, 106, 79, 0.15);
+  border-color: #C5A059;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(197, 160, 89, 0.15);
+  transform: translateY(-2px);
 }
 
-button {
+.otp-btn {
   width: 100%;
-  padding: 12px;
-  background: #2d6a4f;
+  padding: 14px;
+  background: linear-gradient(135deg, #9B7B5E 0%, #C5A059 100%);
   border: none;
   color: white;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: 0.2s;
+  font-family: 'Montserrat', sans-serif;
+  transition: all 0.25s ease;
+  box-shadow: 0 8px 20px rgba(155, 123, 94, 0.35);
 }
 
-button:hover {
-  background: #245b40;
+.otp-btn:hover {
+  background: linear-gradient(135deg, #8a6b4e 0%, #b8913f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(155, 123, 94, 0.45);
+}
+
+.otp-btn:active {
+  transform: translateY(0);
+}
+
+/* dark mode */
+:host-context([data-theme="dark"]) .otp-container {
+  background: linear-gradient(135deg, #111111 0%, #1a1a1a 100%);
+}
+
+:host-context([data-theme="dark"]) .otp-card {
+  background: #1e1e1e;
+  border-color: rgba(255,255,255,0.08);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.5);
+}
+
+:host-context([data-theme="dark"]) .otp-card h2 {
+  color: #f0ebe4;
+}
+
+:host-context([data-theme="dark"]) .otp-card p {
+  color: #9a8f85;
+}
+
+:host-context([data-theme="dark"]) .otp-inputs input {
+  background: #2a2a2a;
+  border-color: rgba(255,255,255,0.1);
+  color: #f0ebe4;
+}
+
+:host-context([data-theme="dark"]) .otp-inputs input:focus {
+  border-color: #C5A059;
+  background: #2a2a2a;
+  box-shadow: 0 0 0 4px rgba(197,160,89,0.15);
+}
+
+:host-context([data-theme="dark"]) .otp-icon {
+  background: rgba(197,160,89,0.1);
+  border-color: rgba(197,160,89,0.25);
 }

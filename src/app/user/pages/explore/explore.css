@@ -233,7 +233,7 @@
 /* Sort select */
 .filter-select {
   width: 100%;
-  padding: 10px 14px;
+  padding: 10px 36px 10px 14px;
   border: 1.5px solid rgba(197,160,89,0.25);
   border-radius: 12px;
   font-size: 15px;
@@ -243,9 +243,21 @@
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s;
+  -webkit-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C5A059' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
 }
 
 .filter-select:focus { border-color: #C5A059; }
+
+.filter-select option {
+  background: #3D3028;
+  color: #F0E8E0;
+  font-size: 14px;
+  padding: 8px 12px;
+}
 
 /* Clear button */
 .filter-clear-btn {

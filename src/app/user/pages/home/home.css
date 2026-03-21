@@ -1811,3 +1811,25 @@
   box-shadow: 0 0 0 2px rgba(101,67,33,0.3);
   transform: scale(1.15);
 }
+
+/* View All Products Button */
+.view-all-wrap {
+  text-align: center;
+  margin-top: 2.5rem;
+}
+.view-all-btn {
+  background: transparent;
+  border: 2px solid #C5A059;
+  color: #C5A059;
+  padding: 0.75rem 2.5rem;
+  border-radius: 50px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.view-all-btn:hover {
+  background: #C5A059;
+  color: #fff;
+}

@@ -21,9 +21,10 @@
         /* Main card */
         .login-card {
             display: flex;
-            width: 1150px;
-            height: 720px;
-            zoom: 1.15;
+            width: 900px;
+            max-width: 95vw;
+            height: auto;
+            min-height: 560px;
             background: #ffffff;
             border-radius: 32px;
             overflow: hidden;
@@ -68,7 +69,7 @@
         .right-form {
             flex: 1;
             background-color: #f5f0e8;
-            padding: 4.5rem 4rem;
+            padding: 3rem 3rem;
             display: flex;
             flex-direction: column;
             justify-content: center;

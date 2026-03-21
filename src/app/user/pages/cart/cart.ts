@@ -57,26 +57,32 @@ export class Cart {
   ngOnInit() {
     this.loadCart();
 
-    this.couponService.getPopularCoupons().subscribe((res: any) => {
+    this.couponService.getActiveCoupons().subscribe((res: any) => {
       this.coupons = res;
+      // apply best coupon only after both cart and coupons are loaded
+      if (this.total > 0) {
+        this.applyBestCoupon();
+      }
     });
   }
 
   loadCart() {
     this.cartService.getCart(this.userId).subscribe((res: any) => {
       if (res.data && res.data.items) {
-        // filter out any items where productId was deleted/null
         this.cartItems = res.data.items.filter((item: any) => item.productId != null);
       } else {
         this.cartItems = [];
       }
       this.calculateTotal();
-      this.applyBestCoupon();
+      // only apply if coupons already loaded
+      if (this.coupons.length > 0) {
+        this.applyBestCoupon();
+      }
       this.cdr.detectChanges();
     });
   }
   loadCoupons() {
-    this.couponService.getPopularCoupons().subscribe({
+    this.couponService.getActiveCoupons().subscribe({
       next: (res: any) => {
         this.coupons = res;
         this.applyBestCoupon();
@@ -95,17 +101,12 @@ export class Cart {
 
     this.coupons.forEach((coupon: any) => {
       if (!coupon.isActive) return;
-
       if (this.total < coupon.minOrderAmount) return;
 
       let discount = 0;
-
       if (coupon.discountType === 'percentage') {
         discount = (this.total * coupon.discountValue) / 100;
-
-        if (coupon.maxDiscount) {
-          discount = Math.min(discount, coupon.maxDiscount);
-        }
+        if (coupon.maxDiscount) discount = Math.min(discount, coupon.maxDiscount);
       } else {
         discount = coupon.discountValue;
       }
@@ -116,6 +117,7 @@ export class Cart {
       }
     });
 
+    // only call API if a valid code was found
     if (bestCode) {
       this.bestCouponCode = bestCode;
       this.couponCode = bestCode;

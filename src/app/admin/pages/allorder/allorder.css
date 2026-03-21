@@ -136,6 +136,14 @@
     box-shadow: 0 0 0 3px rgba(197,160,89,0.15);
 }
 
+.status-select:disabled {
+    background: #f0ebe4;
+    color: #9B7B5E;
+    cursor: not-allowed;
+    opacity: 0.75;
+    border-color: rgba(155,123,94,0.2);
+}
+
 /* ORDER ITEMS */
 .order-items {
     padding: 14px 20px;

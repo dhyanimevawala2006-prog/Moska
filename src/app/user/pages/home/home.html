@@ -109,7 +109,7 @@
         <div class="grid-layout">
             <div class="ex-card" *ngFor="let p of filteredProducts">
                 <div class="ex-img-wrap">
-                    <img [src]="'http://localhost:3000/uploads/'+p.pic1" class="ex-img-main" [alt]="p.pname">
+                    <img [src]="getCardImage(p)" class="ex-img-main" [alt]="p.pname">
                     <img [src]="'http://localhost:3000/uploads/'+p.picHover" class="ex-img-hover" [alt]="p.pname">
                     <div class="ex-overlay">
                         <a (click)="navigateToDetails($event, p)" class="ex-view-btn" style="cursor:pointer">View Details</a>
@@ -141,6 +141,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- View All / Show Less button -->
+        <div class="view-all-wrap" *ngIf="!searchQuery && products.length > HOME_LIMIT">
+          <button class="view-all-btn" (click)="showAllProducts = !showAllProducts">
+            {{ showAllProducts ? 'Show Less ↑' : 'View All Products →' }}
+          </button>
         </div>
     </div>
 </section>

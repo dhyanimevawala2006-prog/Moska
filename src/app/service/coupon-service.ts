@@ -35,6 +35,11 @@ export class CouponService {
     return this.http.get(`${this.apiUrl}/popular`);
   }
 
+  // ACTIVE (CART PAGE — popular + non-popular)
+  getActiveCoupons(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/active`);
+  }
+
   // APPLY (CART PAGE)
   applyCoupon(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/apply`, data);

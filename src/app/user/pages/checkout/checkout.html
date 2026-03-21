@@ -134,7 +134,32 @@
 
         <div class="summary-divider"></div>
 
-        <!-- PRICE BREAKDOWN -->
+        <!-- COUPON -->
+        <div class="coupon-section">
+          <label>Promo Code</label>
+          <div class="coupon-row" *ngIf="!discount">
+            <input
+              type="text"
+              [(ngModel)]="couponInput"
+              placeholder="Enter code"
+              [disabled]="couponLoading"
+              (keyup.enter)="applyCoupon()"
+            />
+            <button (click)="applyCoupon()" [disabled]="couponLoading || !couponInput.trim()">
+              {{ couponLoading ? '...' : 'Apply' }}
+            </button>
+          </div>
+          <div class="view-all-coupons" *ngIf="!discount" (click)="openCouponModal()">
+            View all coupons
+          </div>
+          <div class="coupon-error" *ngIf="couponError">{{ couponError }}</div>
+          <div class="coupon-applied" *ngIf="discount > 0">
+            ✓ Coupon applied — ₹{{ discount }} off
+            <span class="remove-coupon" (click)="removeCoupon()">✕ Remove</span>
+          </div>
+        </div>
+
+        <div class="summary-divider"></div>
         <div class="summary-rows">
           <div class="summary-row">
             <span>Subtotal</span>
@@ -186,4 +211,27 @@
 
   </div>
 
+</div>
+
+<!-- COUPON MODAL -->
+<div class="coupon-modal-bg" *ngIf="showCouponModal" (click)="closeCouponModal()">
+  <div class="coupon-modal" (click)="$event.stopPropagation()">
+    <div class="coupon-header">
+      <h3>Available Coupons</h3>
+      <span class="close-btn" (click)="closeCouponModal()">✕</span>
+    </div>
+    <div class="coupon-body">
+      <div class="coupon-card" *ngFor="let c of coupons">
+        <div class="coupon-info">
+          <h4>{{ c.code }}</h4>
+          <p>{{ c.title }}</p>
+          <span class="coupon-discount">
+            <ng-container *ngIf="c.discountType === 'percentage'">{{ c.discountValue }}% OFF</ng-container>
+            <ng-container *ngIf="c.discountType === 'flat'">₹{{ c.discountValue }} OFF</ng-container>
+          </span>
+        </div>
+        <button class="choose-btn" (click)="chooseCoupon(c.code)">Choose</button>
+      </div>
+    </div>
+  </div>
 </div>

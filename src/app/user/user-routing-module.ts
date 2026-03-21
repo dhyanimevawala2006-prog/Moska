@@ -11,7 +11,6 @@ import { ProductDetails } from './pages/product-details/product-details';
 import { Myorder } from './pages/myorder/myorder';
 import { Profile } from './pages/profile/profile';
 import { Wishlist } from './pages/wishlist/wishlist';
-import { About1 } from './pages/about1/about1';
 import { Checkout } from './pages/checkout/checkout';
 import { Explore } from './pages/explore/explore';
 
@@ -32,7 +31,7 @@ const routes: Routes = [
       { path: 'myorder', component: Myorder },
       { path: 'profile', component: Profile },
       { path: 'wishlist', component: Wishlist },
-      { path: 'about1', component: About1 },
+      { path: 'about1', component: About },
       { path: 'explore', component: Explore }
     ],
   },

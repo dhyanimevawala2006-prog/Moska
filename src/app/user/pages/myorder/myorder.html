@@ -87,6 +87,10 @@
                     <span *ngIf="order.paymentMethod === 'online'">💳 Online Payment</span>
                     <span *ngIf="order.paymentMethod !== 'online'">💵 Cash on Delivery</span>
                 </span>
+                <button class="btn-invoice" (click)="downloadInvoice(order, i)"
+                    *ngIf="order.status?.toLowerCase() === 'delivered'">
+                    🧾 Invoice
+                </button>
                 <button
                     *ngIf="canCancel(order.status)"
                     class="btn-cancel"

@@ -23,7 +23,9 @@ export class EditProduct implements OnInit {
   hoverFileName: string = '';
   currentMainImage: string = '';
   currentHoverImage: string = '';
-  colorList: string[] = ['#000000'];
+  colorList: { color: string; image: File | null; preview: string; existingImage: string }[] = [
+    { color: '#000000', image: null, preview: '', existingImage: '' }
+  ];
   
   baseUrl = 'http://localhost:3000';
 
@@ -84,8 +86,14 @@ export class EditProduct implements OnInit {
         });
 
         this.colorList = (product.colors && product.colors.length > 0)
-          ? product.colors
-          : ['#000000'];
+          ? product.colors.map((c: any) => ({
+              color: c.color ?? c,
+              image: null,
+              preview: '',
+              existingImage: c.image && c.image !== 'no-image.jpg'
+                ? `${this.baseUrl}/uploads/${c.image}` : ''
+            }))
+          : [{ color: '#000000', image: null, preview: '', existingImage: '' }];
         
         this.currentMainImage = `${this.baseUrl}/uploads/${product.pic1}`;
         this.currentHoverImage = `${this.baseUrl}/uploads/${product.picHover}`;
@@ -120,13 +128,23 @@ export class EditProduct implements OnInit {
     }
   }
 
-  addColor() { this.colorList.push('#000000'); }
+  addColor() { this.colorList.push({ color: '#000000', image: null, preview: '', existingImage: '' }); }
 
   removeColor(index: number) {
     if (this.colorList.length > 1) this.colorList.splice(index, 1);
   }
 
-  updateColor(index: number, value: string) { this.colorList[index] = value; }
+  updateColor(index: number, value: string) { this.colorList[index].color = value; }
+
+  onColorImageChange(index: number, event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.colorList[index].image = file;
+      const reader = new FileReader();
+      reader.onload = () => { this.colorList[index].preview = reader.result as string; };
+      reader.readAsDataURL(file);
+    }
+  }
 
   onSubmit() {
     if (this.productForm.valid) {
@@ -141,7 +159,10 @@ export class EditProduct implements OnInit {
         formData.append('oldPrice', this.productForm.value.oldPrice);
       }
 
-      this.colorList.forEach(c => formData.append('colors[]', c));
+      this.colorList.forEach(c => {
+        formData.append('colors[]', c.color);
+        if (c.image) formData.append('colorImages', c.image);
+      });
 
       if (this.mainFile) formData.append('pic', this.mainFile);
       if (this.hoverFile) formData.append('picHover', this.hoverFile);

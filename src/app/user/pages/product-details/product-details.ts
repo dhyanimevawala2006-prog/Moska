@@ -75,11 +75,8 @@ export class ProductDetails implements OnInit {
           const match = this.product.colors.find((c: any) => (c.color ?? c) === paramColor);
           if (match) {
             this.selectedColor = match.color ?? match;
-            if (match.image && match.image !== 'no-image.jpg') {
-              this.displayImage = match.image;
-            } else {
-              this.displayImage = this.product.pic1;
-            }
+            this.displayImage = (match.image && match.image !== 'no-image.jpg')
+              ? match.image : this.product.pic1;
           } else {
             this.selectedColor = paramColor;
           }

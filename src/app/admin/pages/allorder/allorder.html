@@ -32,13 +32,14 @@
                     {{ order.userId?.name }}
                 </div>
                 <!-- Status -->
-                <select class="status-select" [(ngModel)]="order.status" (change)="updateStatus(order._id, order.status)">
+                <select class="status-select" [(ngModel)]="order.status"
+                    (change)="updateStatus(order._id, order.status)"
+                    [disabled]="order.status === 'Shipped' || order.status === 'Delivered' || order.status === 'Cancelled'">
                     <option>Pending</option>
                     <option>Preparing</option>
                     <option>Shipped</option>
-                    <option>Out for Delivery</option>
                     <option>Delivered</option>
-                    <option>Cancelled</option>
+                    <option *ngIf="order.status === 'Cancelled'" disabled>Cancelled</option>
                 </select>
             </div>
         </div>

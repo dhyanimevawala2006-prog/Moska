@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { NgFor, NgIf, DatePipe, SlicePipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../../service/order-service';
+import { InvoiceService } from '../../../service/invoice-service';
 import { MSwal as Swal } from '../../../service/swal-service';
 
 @Component({
@@ -23,7 +24,11 @@ export class Myorder {
     { label: 'Delivered', icon: 'fas fa-home',           key: 'delivered'  },
   ];
 
-  constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
+  constructor(
+    private orderService: OrderService,
+    private invoiceService: InvoiceService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() { this.getOrders(); }
 
@@ -65,5 +70,9 @@ export class Myorder {
         });
       }
     });
+  }
+
+  downloadInvoice(order: any, index: number) {
+    this.invoiceService.openInvoice(order, index);
   }
 }

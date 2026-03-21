@@ -23,6 +23,8 @@ export class Home implements AfterViewInit, OnInit {
   searchQuery: string = '';
   sortBy: string = 'default';
   selectedColors: Record<string, string> = {};
+  showAllProducts = false;
+  readonly HOME_LIMIT = 8;
 
   selectColor(e: Event, productId: string, colorObj: any) {
     e.preventDefault(); e.stopPropagation();
@@ -34,9 +36,11 @@ export class Home implements AfterViewInit, OnInit {
     const sel = this.selectedColors[p._id];
     if (sel && p.colors?.length) {
       const match = p.colors.find((c: any) => (c.color ?? c) === sel);
-      if (match?.image && match.image !== 'no-image.jpg') return match.image;
+      if (match?.image && match.image !== 'no-image.jpg') {
+        return 'http://localhost:3000/uploads/' + match.image;
+      }
     }
-    return p.pic1;
+    return 'http://localhost:3000/uploads/' + p.pic1;
   }
 
   navigateToDetails(e: Event, p: any) {
@@ -61,6 +65,11 @@ export class Home implements AfterViewInit, OnInit {
       case 'price-desc': list.sort((a, b) => +b.price - +a.price); break;
       case 'name-asc':   list.sort((a, b) => a.pname?.localeCompare(b.pname)); break;
       case 'name-desc':  list.sort((a, b) => b.pname?.localeCompare(a.pname)); break;
+    }
+
+    // Limit to HOME_LIMIT unless search active or showAll
+    if (!this.searchQuery.trim() && !this.showAllProducts) {
+      return list.slice(0, this.HOME_LIMIT);
     }
 
     return list;

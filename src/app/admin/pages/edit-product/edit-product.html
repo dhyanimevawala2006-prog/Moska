@@ -87,14 +87,19 @@
               Colors
             </label>
             <div class="color-picker-list">
-              <div class="color-picker-row" *ngFor="let color of colorList; let i = index">
-                <input 
-                  type="color" 
+              <div class="color-picker-row" *ngFor="let c of colorList; let i = index">
+                <input
+                  type="color"
                   class="color-picker-input"
-                  [value]="color"
+                  [value]="c.color"
                   (input)="updateColor(i, $any($event.target).value)"
                 >
-                <span class="color-hex-label">{{ colorList[i] }}</span>
+                <span class="color-hex-label">{{ c.color }}</span>
+                <label class="color-img-upload-btn" title="Upload image for this colour">
+                  <i class="fas fa-image"></i>
+                  <input type="file" accept="image/*" style="display:none" (change)="onColorImageChange(i, $event)">
+                </label>
+                <img *ngIf="c.preview || c.existingImage" [src]="c.preview || c.existingImage" class="color-img-preview">
                 <button type="button" class="color-remove-btn" (click)="removeColor(i)" [disabled]="colorList.length === 1">
                   <i class="fas fa-times"></i>
                 </button>

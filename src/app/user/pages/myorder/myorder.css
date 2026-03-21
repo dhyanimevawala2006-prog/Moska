@@ -357,3 +357,22 @@
 [data-theme="dark"] .step.done .step-label,
 [data-theme="dark"] .step.active .step-label { color: #c4a07a; }
 [data-theme="dark"] .cancelled-bar { background: rgba(200,90,84,0.12); }
+
+/* Invoice button */
+.btn-invoice {
+    padding: 8px 18px;
+    background: transparent;
+    color: #9B7B5E;
+    border: 1.5px solid #9B7B5E;
+    border-radius: 40px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-invoice:hover {
+    background: #9B7B5E;
+    color: white;
+}

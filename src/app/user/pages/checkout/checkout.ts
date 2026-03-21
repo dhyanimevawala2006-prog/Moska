@@ -4,6 +4,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../../service/order-service';
 import { CartService } from '../../../service/cart-service';
+import { CouponService } from '../../../service/coupon-service';
 import { MSwal as Swal } from '../../../service/swal-service';
 
 declare var Razorpay: any;
@@ -36,6 +37,12 @@ export class Checkout implements OnInit {
   };
 
   pmode: string = 'cod';
+
+  couponInput: string = '';
+  couponLoading: boolean = false;
+  couponError: string = '';
+  showCouponModal: boolean = false;
+  coupons: any[] = [];
 
   // City-wise delivery charges (case-insensitive match)
   private cityCharges: { [key: string]: number } = {
@@ -90,6 +97,7 @@ export class Checkout implements OnInit {
     private router: Router,
     private orderService: OrderService,
     private cartService: CartService,
+    private couponService: CouponService,
   ) {
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as any;
@@ -106,6 +114,9 @@ export class Checkout implements OnInit {
     if (!this.cartItems.length) {
       this.router.navigate(['/cart']);
     }
+    this.couponService.getActiveCoupons().subscribe((res: any) => {
+      this.coupons = res || [];
+    });
   }
 
   get grandTotal(): number {
@@ -120,6 +131,39 @@ export class Checkout implements OnInit {
       this.form.address.trim() &&
       this.pmode
     );
+  }
+
+  openCouponModal() { this.showCouponModal = true; }
+  closeCouponModal() { this.showCouponModal = false; }
+  chooseCoupon(code: string) {
+    this.couponInput = code;
+    this.showCouponModal = false;
+    this.applyCoupon();
+  }
+
+  applyCoupon(): void {
+    if (!this.couponInput.trim()) return;
+    this.couponLoading = true;
+    this.couponError = '';
+    this.orderService.applyCoupon({ code: this.couponInput.trim(), orderTotal: this.total }).subscribe({
+      next: (res: any) => {
+        this.couponLoading = false;
+        this.discount = res.discount || 0;
+        this.couponCode = this.couponInput.trim();
+        this.couponInput = '';
+      },
+      error: (err: any) => {
+        this.couponLoading = false;
+        this.couponError = err?.error?.message || 'Invalid or expired coupon.';
+      }
+    });
+  }
+
+  removeCoupon(): void {
+    this.discount = 0;
+    this.couponCode = '';
+    this.couponError = '';
+    this.couponInput = '';
   }
 
   placeOrder(): void {
@@ -184,7 +228,7 @@ export class Checkout implements OnInit {
 
   submitOrder(orderData: any): void {
     this.orderService.createOrder(orderData).subscribe({
-      next: () => {
+      next: (res: any) => {
         this.cartService.clearCart(this.userId).subscribe();
         Swal.fire({
           icon: 'success',
