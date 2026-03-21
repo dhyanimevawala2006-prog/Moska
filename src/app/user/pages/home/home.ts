@@ -19,12 +19,12 @@ export class Home implements AfterViewInit, OnInit {
   currentIndex = 0;
   slides: any;
   products: any[] = [];
+  displayProducts: any[] = []; // random 5 popular products shown on home
   coupons: any[] = [];
   searchQuery: string = '';
   sortBy: string = 'default';
   selectedColors: Record<string, string> = {};
-  showAllProducts = false;
-  readonly HOME_LIMIT = 8;
+  readonly HOME_LIMIT = 5;
 
   selectColor(e: Event, productId: string, colorObj: any) {
     e.preventDefault(); e.stopPropagation();
@@ -49,8 +49,19 @@ export class Home implements AfterViewInit, OnInit {
     this.router.navigate(['/productdetails', p._id], color ? { queryParams: { color } } : {});
   }
 
+  private pickRandom5Popular() {
+    const popular = this.products.filter(p => p.popular);
+    // shuffle and take first 5
+    const shuffled = [...popular].sort(() => Math.random() - 0.5);
+    this.displayProducts = shuffled.slice(0, this.HOME_LIMIT);
+  }
+
+  get popularCount(): number {
+    return this.products.filter(p => p.popular).length;
+  }
+
   get filteredProducts(): any[] {
-    let list = [...this.products];
+    let list = [...this.displayProducts];
 
     if (this.searchQuery.trim()) {
       const q = this.searchQuery.toLowerCase();
@@ -65,11 +76,6 @@ export class Home implements AfterViewInit, OnInit {
       case 'price-desc': list.sort((a, b) => +b.price - +a.price); break;
       case 'name-asc':   list.sort((a, b) => a.pname?.localeCompare(b.pname)); break;
       case 'name-desc':  list.sort((a, b) => b.pname?.localeCompare(a.pname)); break;
-    }
-
-    // Limit to HOME_LIMIT unless search active or showAll
-    if (!this.searchQuery.trim() && !this.showAllProducts) {
-      return list.slice(0, this.HOME_LIMIT);
     }
 
     return list;
@@ -94,6 +100,7 @@ export class Home implements AfterViewInit, OnInit {
     this.pservice.getAllProducts().subscribe({
       next: (res: any) => {
         this.products = res.data;
+        this.pickRandom5Popular();
         this.cdr.detectChanges();
       },
       error: (err) => console.log(err),

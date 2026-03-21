@@ -72,7 +72,7 @@ export class EditProduct implements OnInit {
   }
 
   loadProduct() {
-    this.http.get<any>(`${this.baseUrl}/api/product/get/${this.productId}`).subscribe({
+    this.http.get<any>(`${this.baseUrl}/api/products/get/${this.productId}`).subscribe({
       next: (res: any) => {
         const product = res.data;
         
@@ -167,7 +167,7 @@ export class EditProduct implements OnInit {
       if (this.mainFile) formData.append('pic', this.mainFile);
       if (this.hoverFile) formData.append('picHover', this.hoverFile);
 
-      this.http.put(`${this.baseUrl}/api/product/update/${this.productId}`, formData).subscribe({
+      this.http.put(`${this.baseUrl}/api/products/update/${this.productId}`, formData).subscribe({
         next: (res: any) => {
           Swal.fire({ icon: 'success', title: 'Product Updated!', timer: 1500, showConfirmButton: false })
             .then(() => this.router.navigate(['/admin/showproduct']));

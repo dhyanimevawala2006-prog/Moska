@@ -107,8 +107,10 @@ export class ProductDetails implements OnInit {
 
   selectColor(colorObj: any) {
     this.selectedColor = colorObj.color ?? colorObj;
+    // Always show the color's own image; fall back to pic1 only if no image attached
     this.displayImage = (colorObj.image && colorObj.image !== 'no-image.jpg')
-      ? colorObj.image : this.product.pic1;
+      ? colorObj.image
+      : this.product.pic1;
     this.cdr.detectChanges();
   }
 

@@ -16,10 +16,12 @@ export class ShowProduct implements OnInit {
   products: any[] = [];
   searchTerm: string = '';
   isLoading: boolean = false;
-  apiUrl = 'http://localhost:3000/api/product/getall';
+  togglingIds: Set<string> = new Set();
+  toast: { message: string; type: string } | null = null;
+  private toastTimer: any;
 
   constructor(
-    private http: HttpClient, 
+    private http: HttpClient,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
@@ -29,63 +31,44 @@ export class ShowProduct implements OnInit {
   }
 
   loadProducts() {
-    this.http.get<any>(this.apiUrl).subscribe({
-      next: (response) => {
-        console.log('✅ Response:', response);
-        
-        // Assign products
-        if (response && response.data) {
-          this.products = [...response.data]; // Create new array
-        } else if (Array.isArray(response)) {
-          this.products = [...response];
-        } else {
-          this.products = [];
-        }
-        
-        console.log('📦 Products assigned:', this.products.length);
-        console.log('📋 Products:', this.products);
-        
-        // Force change detection
+    this.isLoading = true;
+    this.http.get<any>('http://localhost:3000/api/products/getall').subscribe({
+      next: (res) => {
+        this.products = res?.data ? [...res.data] : Array.isArray(res) ? [...res] : [];
+        this.isLoading = false;
         this.cdr.detectChanges();
       },
-      error: (error) => {
-        console.error('❌ Error:', error);
+      error: () => {
         this.products = [];
+        this.isLoading = false;
         this.cdr.detectChanges();
       }
     });
   }
 
   filteredProducts() {
-    if (!this.searchTerm || this.searchTerm.trim() === '') {
-      return this.products;
-    }
+    if (!this.searchTerm?.trim()) return this.products;
     const term = this.searchTerm.toLowerCase().trim();
     return this.products.filter(p =>
       p.pname?.toLowerCase().includes(term) ||
       p.category?.cat_name?.toLowerCase().includes(term) ||
-      p.description?.toLowerCase().includes(term) ||
       p.price?.toString().includes(term)
     );
   }
 
   getCategoryIcon(category: any): string {
-    const catName = (category?.cat_name || '').toLowerCase();
-    if (catName.includes('clothes')) return 'tshirt';
-    if (catName.includes('electronic')) return 'microchip';
-    if (catName.includes('medicine')) return 'capsules';
-    if (catName.includes('jewellery')) return 'gem';
-    if (catName.includes('toy')) return 'puzzle-piece';
-    if (catName.includes('beauty')) return 'spray-can-sparkles';
+    const n = (category?.cat_name || '').toLowerCase();
+    if (n.includes('clothes')) return 'tshirt';
+    if (n.includes('electronic')) return 'microchip';
+    if (n.includes('medicine')) return 'capsules';
+    if (n.includes('jewellery')) return 'gem';
+    if (n.includes('toy')) return 'puzzle-piece';
+    if (n.includes('beauty')) return 'spray-can-sparkles';
     return 'box';
   }
 
   viewImage(filename: string) {
     window.open('http://localhost:3000/uploads/' + filename, '_blank');
-  }
-
-  viewProduct(id: string) {
-    console.log('View product:', id);
   }
 
   editProduct(id: string) {
@@ -99,19 +82,48 @@ export class ShowProduct implements OnInit {
       confirmButtonText: 'Yes, delete'
     }).then(result => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/product/delete/${id}`).subscribe({
+        this.http.delete(`http://localhost:3000/api/products/delete/${id}`).subscribe({
           next: () => {
             this.products = this.products.filter(p => p._id !== id);
             this.cdr.detectChanges();
             Swal.fire({ icon: 'success', title: 'Deleted!', timer: 1200, showConfirmButton: false });
           },
-          error: (err) => {
-            console.error('❌ Delete error:', err);
-            Swal.fire({ icon: 'error', title: 'Failed', text: 'Failed to delete product', confirmButtonColor: '#9B7B5E' });
+          error: () => {
+            Swal.fire({ icon: 'error', title: 'Failed', text: 'Could not delete product', confirmButtonColor: '#9B7B5E' });
           }
         });
       }
     });
+  }
+
+  onTogglePopular(product: any) {
+    if (this.togglingIds.has(product._id)) return;
+    const newValue = !product.popular;
+    product.popular = newValue;
+    this.togglingIds.add(product._id);
+
+    const formData = new FormData();
+    formData.append('popular', newValue.toString());
+
+    this.http.put(`http://localhost:3000/api/products/update/${product._id}`, formData).subscribe({
+      next: () => {
+        this.togglingIds.delete(product._id);
+        this.showToast(newValue ? '⭐ Marked as Popular' : '✖ Removed from Popular', newValue ? 'success' : 'info');
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        product.popular = !newValue;
+        this.togglingIds.delete(product._id);
+        this.showToast('Failed to update popular status', 'error');
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  showToast(message: string, type: string) {
+    this.toast = { message, type };
+    clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => { this.toast = null; this.cdr.detectChanges(); }, 2500);
   }
 
   getTotalStock(): number {
@@ -119,8 +131,11 @@ export class ShowProduct implements OnInit {
   }
 
   getAveragePrice(): string {
-    if (this.products.length === 0) return '0.00';
-    const total = this.products.reduce((sum, p) => sum + (p.price || 0), 0);
-    return (total / this.products.length).toFixed(2);
+    if (!this.products.length) return '0.00';
+    return (this.products.reduce((s, p) => s + (p.price || 0), 0) / this.products.length).toFixed(2);
+  }
+
+  getPopularCount(): number {
+    return this.products.filter(p => p.popular).length;
   }
 }

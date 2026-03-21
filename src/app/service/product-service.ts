@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class ProductService {
-  url = "http://localhost:3000/api/product"; // backend base URL
+  url = "http://localhost:3000/api/products"; // backend base URL
 
   constructor(private http: HttpClient) { }
 
@@ -40,6 +40,11 @@ export class ProductService {
   }
 
   getAll() {
-  return this.http.get(this.url + "/all");
-}
+    return this.http.get(this.url + "/all");
+  }
+
+  getRandomPopular() {
+    // cache-bust so every call hits the server fresh and returns new random 5
+    return this.http.get(`${this.url}/popular/random?t=${Date.now()}`);
+  }
 }

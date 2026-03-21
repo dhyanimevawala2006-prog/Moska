@@ -24,12 +24,17 @@
       </div>
 
       <div class="pd-thumbnails">
-        <div class="pd-thumb" [class.active]="displayImage === product.pic1" (click)="displayImage = product.pic1">
-          <img [src]="'http://localhost:3000/uploads/' + product.pic1" alt="img1">
-        </div>
-        <div class="pd-thumb" [class.active]="displayImage === product.picHover" (click)="displayImage = product.picHover">
-          <img [src]="'http://localhost:3000/uploads/' + product.picHover" alt="img2">
-        </div>
+        <!-- Show pic1 & picHover only when no color is selected -->
+        <ng-container *ngIf="!selectedColor || product.colors?.length === 0">
+          <div class="pd-thumb" [class.active]="displayImage === product.pic1" (click)="displayImage = product.pic1">
+            <img [src]="'http://localhost:3000/uploads/' + product.pic1" alt="img1">
+          </div>
+          <div class="pd-thumb" [class.active]="displayImage === product.picHover" (click)="displayImage = product.picHover">
+            <img [src]="'http://localhost:3000/uploads/' + product.picHover" alt="img2">
+          </div>
+        </ng-container>
+
+        <!-- Color thumbnails — clicking selects that color and shows its image -->
         <ng-container *ngFor="let colorObj of product.colors">
           <div class="pd-thumb"
             *ngIf="colorObj.image && colorObj.image !== 'no-image.jpg'"

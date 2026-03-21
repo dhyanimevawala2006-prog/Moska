@@ -55,6 +55,7 @@ export class AddProduct implements OnInit {
       oldPrice: [''],
       stock: [0, [Validators.min(0)]],
       description: ['', Validators.required],
+      popular: [false],
       pic: [''],
       picHover: ['']
     });
@@ -119,6 +120,7 @@ export class AddProduct implements OnInit {
       formData.append('description', this.productForm.value.description);
       formData.append('stock', this.productForm.value.stock || '0');
       if (this.productForm.value.oldPrice) formData.append('oldPrice', this.productForm.value.oldPrice);
+      formData.append('popular', this.productForm.value.popular ? 'true' : 'false');
 
       this.colorList.forEach(c => {
         formData.append('colors[]', c.color);
@@ -140,6 +142,7 @@ export class AddProduct implements OnInit {
           this.hoverFileName = '';
           this.colorList = [{ color: '#000000', image: null, preview: '' }];
           this.selectedSizes = [];
+          setTimeout(() => this.router.navigate(['/admin/showproduct']), 1800);
         },
         error: (err) => {
           Swal.fire({ icon: 'error', title: 'Failed', text: 'Failed to add product: ' + (err.error?.message || err.message), confirmButtonColor: '#9B7B5E' });
