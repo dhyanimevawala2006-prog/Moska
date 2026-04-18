@@ -114,7 +114,9 @@
         <div class="order-items">
           <div class="order-item" *ngFor="let item of cartItems">
             <div class="order-item-img">
-              <img [src]="imageUrl + (item.displayImage || item.productId.pic1)" [alt]="item.productId.pname" />
+              <img [src]="getProductImage(item.displayImage || item.productId?.pic1)"
+                   [alt]="item.productId.pname"
+                   (error)="onImgError($event)" />
               <span class="qty-badge">{{ item.quantity }}</span>
             </div>
             <div class="order-item-info">

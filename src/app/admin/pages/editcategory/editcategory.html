@@ -1,7 +1,7 @@
 <div class="estore-edit-container">
-  <!-- Main Card -->
   <div class="estore-edit-card">
-    <!-- Card Header -->
+
+    <!-- Header -->
     <div class="estore-edit-header">
       <div class="header-content">
         <i class="fas fa-pen-square"></i>
@@ -12,10 +12,10 @@
       </div>
     </div>
 
-    <!-- Card Body -->
+    <!-- Body -->
     <div class="estore-edit-body">
       <form [formGroup]="frmGrp" (ngSubmit)="onUpdate()">
-        
+
         <!-- Category Name -->
         <div class="estore-form-group">
           <label class="estore-label">
@@ -28,28 +28,30 @@
             class="estore-input"
             placeholder="Enter category name"
           />
-          <app-validation-message
-            [control]="frmGrp.get('cat_name')">
+          <app-validation-message [control]="frmGrp.get('cat_name')">
           </app-validation-message>
         </div>
 
-        <!-- Old Image Preview -->
-        <div class="estore-image-section" *ngIf="oldImage">
-          <label class="estore-label">
-            <i class="fas fa-image"></i>
-            Current Image
-          </label>
-          <div class="estore-image-preview">
-            <img
-              [src]="'http://localhost:3000/uploads/' + oldImage"
-              alt="Current category"
-              class="estore-preview-img"
-            />
-            <span class="estore-image-badge">
-              <i class="fas fa-check-circle"></i> Active
-            </span>
+        <!-- Current Image Preview -->
+        @if (oldImage) {
+          <div class="estore-image-section">
+            <label class="estore-label">
+              <i class="fas fa-image"></i>
+              Current Image
+            </label>
+            <div class="estore-image-preview">
+              <img
+                [src]="getCategoryImage(oldImage)"
+                alt="Current category"
+                class="estore-preview-img"
+                (error)="onImgError($event)"
+              />
+              <span class="estore-image-badge">
+                <i class="fas fa-check-circle"></i> Active
+              </span>
+            </div>
           </div>
-        </div>
+        }
 
         <!-- New Image Upload -->
         <div class="estore-form-group">
@@ -59,8 +61,8 @@
           </label>
           <div class="estore-file-zone" (click)="fileInput.click()">
             <i class="fas fa-upload"></i>
-            <span>Click to upload or drag & drop</span>
-            <span class="file-hint">PNG, JPG up to 10MB</span>
+            <span>{{ selectedFileName || 'Click to upload or drag & drop' }}</span>
+            <span class="file-hint">PNG, JPG, WEBP up to 5 MB</span>
           </div>
           <input
             type="file"
@@ -69,26 +71,24 @@
             (change)="onFileChange($event)"
             accept="image/*"
           />
-          <small class="file-name" *ngIf="selectedFile">
-            <i class="fas fa-check-circle"></i> {{ selectedFile.name }}
-          </small>
+          @if (selectedFileName) {
+            <small class="file-name">
+              <i class="fas fa-check-circle"></i> {{ selectedFileName }}
+            </small>
+          }
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Actions -->
         <div class="estore-action-buttons">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="estore-btn estore-btn-primary"
-            [disabled]="frmGrp.invalid"
-          >
+            [disabled]="frmGrp.invalid">
             <i class="fas fa-save"></i>
             <span>Update Category</span>
           </button>
-          
-          <a 
-            routerLink="/admin/category" 
-            class="estore-btn estore-btn-secondary"
-          >
+
+          <a routerLink="/admin/category" class="estore-btn estore-btn-secondary">
             <i class="fas fa-arrow-left"></i>
             <span>Back to List</span>
           </a>

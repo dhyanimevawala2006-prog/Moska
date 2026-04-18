@@ -26,8 +26,9 @@ export class EditProduct implements OnInit {
   colorList: { color: string; image: File | null; preview: string; existingImage: string }[] = [
     { color: '#000000', image: null, preview: '', existingImage: '' }
   ];
+  readonly fallbackImg = 'assets/no-image.png';
   
-  baseUrl = 'http://localhost:3000';
+  baseUrl = 'https://moska-backend-cjqw.onrender.com'; // kept for API calls only
 
   constructor(
     private fb: FormBuilder,
@@ -52,21 +53,12 @@ export class EditProduct implements OnInit {
   }
 
   loadCategories() {
-    const defaultCategories = [
-      { _id: '', cat_name: 'Clothes' },
-      { _id: '', cat_name: 'Beauty' },
-      { _id: '', cat_name: 'Medicine' },
-      { _id: '', cat_name: 'Electronic Item' },
-      { _id: '', cat_name: 'Toy' },
-      { _id: '', cat_name: 'Jewellery' }
-    ];
-
     this.http.get<any>(`${this.baseUrl}/api/categories/all`).subscribe({
       next: (res: any) => {
-        this.categories = res && res.length > 0 ? res : defaultCategories;
+        this.categories = res?.data ?? res;
       },
       error: () => {
-        this.categories = defaultCategories;
+        this.categories = [];
       }
     });
   }
@@ -78,7 +70,7 @@ export class EditProduct implements OnInit {
         
         this.productForm.patchValue({
           pname: product.pname,
-          category: product.category?.cat_name || product.category,
+          category: product.category?._id || product.category,
           price: product.price,
           oldPrice: product.oldPrice || '',
           stock: product.stock || 0,
@@ -90,16 +82,15 @@ export class EditProduct implements OnInit {
               color: c.color ?? c,
               image: null,
               preview: '',
-              existingImage: c.image && c.image !== 'no-image.jpg'
-                ? `${this.baseUrl}/uploads/${c.image}` : ''
+              existingImage: (typeof c.image === 'string' && c.image.startsWith('http')) ? c.image : ''
             }))
           : [{ color: '#000000', image: null, preview: '', existingImage: '' }];
-        
-        this.currentMainImage = `${this.baseUrl}/uploads/${product.pic1}`;
-        this.currentHoverImage = `${this.baseUrl}/uploads/${product.picHover}`;
+
+        // pic1 and picHover are now full Cloudinary URLs
+        this.currentMainImage  = product.pic1  || '';
+        this.currentHoverImage = product.picHover || '';
       },
       error: (err) => {
-        console.error('Error loading product:', err);
         Swal.fire({ icon: 'error', title: 'Load Failed', text: 'Failed to load product', confirmButtonColor: '#9B7B5E' });
       }
     });
@@ -146,6 +137,21 @@ export class EditProduct implements OnInit {
     }
   }
 
+  private isRenderableImage(url: string | null | undefined): boolean {
+    return typeof url === 'string' && (url.startsWith('http') || url.startsWith('data:image/'));
+  }
+
+  getPreviewImage(url: string | null | undefined): string {
+    return typeof url === 'string' && this.isRenderableImage(url) ? url : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
+  }
+
   onSubmit() {
     if (this.productForm.valid) {
       const formData = new FormData();
@@ -173,7 +179,6 @@ export class EditProduct implements OnInit {
             .then(() => this.router.navigate(['/admin/showproduct']));
         },
         error: (err) => {
-          console.error('Update error:', err);
           Swal.fire({ icon: 'error', title: 'Update Failed', text: 'Failed to update product', confirmButtonColor: '#9B7B5E' });
         }
       });

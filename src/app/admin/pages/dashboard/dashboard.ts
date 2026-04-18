@@ -33,14 +33,13 @@ export class Dashboard implements OnInit, OnDestroy {
   constructor(private http: HttpClient, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.http.get<any>('http://localhost:3000/api/admin/stats/dashboard').subscribe({
+    this.http.get<any>('https://moska-backend-cjqw.onrender.com/api/admin/stats/dashboard').subscribe({
       next: (res) => {
         if (res.success) {
           this.stats        = res.data.stats;
           this.recentOrders = res.data.recentOrders;
           this.topProducts  = res.data.topProducts;
           this.revenueChartData = res.data.revenueChart || [];
-          console.log('revenueChart:', this.revenueChartData);
         }
         this.loading = false;
         this.cdr.detectChanges();
@@ -233,8 +232,17 @@ export class Dashboard implements OnInit, OnDestroy {
     return 'In Stock';
   }
 
+  readonly fallbackImg = 'assets/no-image.png';
+
   getProductImg(p: any): string {
-    if (p.pic1) return 'http://localhost:3000/uploads/' + p.pic1;
-    return 'https://via.placeholder.com/40';
+    return this.isCloudinaryImage(p?.pic1) ? p.pic1 : this.fallbackImg;
+  }
+
+  private isCloudinaryImage(url: string | null | undefined): boolean {
+    return typeof url === 'string' && url.startsWith('http');
+  }
+
+  onImageError(event: Event) {
+    (event.target as HTMLImageElement).src = this.fallbackImg;
   }
 }

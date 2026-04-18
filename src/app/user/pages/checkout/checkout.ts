@@ -25,7 +25,8 @@ export class Checkout implements OnInit {
   discount: number = 0;
   couponCode: string = '';
   finalTotal: number = 0;
-  imageUrl = 'http://localhost:3000/uploads/';
+  imageUrl = ''; // images are now full Cloudinary URLs stored in product.pic1
+  readonly fallbackImg = 'assets/no-image.png';
 
   // Shipping form
   form = {
@@ -116,7 +117,41 @@ export class Checkout implements OnInit {
     }
     this.couponService.getActiveCoupons().subscribe((res: any) => {
       this.coupons = res || [];
+      // auto-apply best coupon if none already applied from cart
+      if (!this.couponCode) {
+        this.applyBestCoupon();
+      }
     });
+  }
+
+  applyBestCoupon(): void {
+    if (!this.coupons.length || this.total <= 0) return;
+
+    let bestDiscount = 0;
+    let bestCode = '';
+
+    this.coupons.forEach((coupon: any) => {
+      if (!coupon.isActive) return;
+      if (this.total < coupon.minOrderAmount) return;
+
+      let discount = 0;
+      if (coupon.discountType === 'percentage') {
+        discount = (this.total * coupon.discountValue) / 100;
+        if (coupon.maxDiscount) discount = Math.min(discount, coupon.maxDiscount);
+      } else {
+        discount = coupon.discountValue;
+      }
+
+      if (discount > bestDiscount) {
+        bestDiscount = discount;
+        bestCode = coupon.code;
+      }
+    });
+
+    if (bestCode) {
+      this.couponInput = bestCode;
+      this.applyCoupon();
+    }
   }
 
   get grandTotal(): number {
@@ -141,11 +176,22 @@ export class Checkout implements OnInit {
     this.applyCoupon();
   }
 
+  getProductImage(url: string | null | undefined): string {
+    return typeof url === 'string' && url.startsWith('http') ? url : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
+  }
+
   applyCoupon(): void {
     if (!this.couponInput.trim()) return;
     this.couponLoading = true;
     this.couponError = '';
-    this.orderService.applyCoupon({ code: this.couponInput.trim(), orderTotal: this.total }).subscribe({
+    this.couponService.applyCoupon({ code: this.couponInput.trim(), cartTotal: this.total }).subscribe({
       next: (res: any) => {
         this.couponLoading = false;
         this.discount = res.discount || 0;
@@ -180,8 +226,8 @@ export class Checkout implements OnInit {
     const orderData = {
       userId: this.userId,
       items: this.cartItems.map((item: any) => ({
-        productId: item.productId._id,
-        quantity: item.quantity,
+        productId: item.productId?._id || item.productId,
+        quantity: item.quantity || 1,
         color: item.color || '',
         size: item.size || '',
       })),
@@ -247,11 +293,11 @@ export class Checkout implements OnInit {
           }
         });
       },
-      error: () => {
+      error: (err: any) => {
         Swal.fire({
           icon: 'error',
           title: 'Order Failed',
-          text: 'Something went wrong. Please try again.',
+          text: err?.error?.error || err?.error?.message || 'Something went wrong. Please try again.',
           confirmButtonColor: '#9B7B5E',
         });
       },

@@ -19,6 +19,7 @@ export class ShowProduct implements OnInit {
   togglingIds: Set<string> = new Set();
   toast: { message: string; type: string } | null = null;
   private toastTimer: any;
+  readonly fallbackImg = 'assets/no-image.png';
 
   constructor(
     private http: HttpClient,
@@ -32,7 +33,7 @@ export class ShowProduct implements OnInit {
 
   loadProducts() {
     this.isLoading = true;
-    this.http.get<any>('http://localhost:3000/api/products/getall').subscribe({
+    this.http.get<any>('https://moska-backend-cjqw.onrender.com/api/products/getall').subscribe({
       next: (res) => {
         this.products = res?.data ? [...res.data] : Array.isArray(res) ? [...res] : [];
         this.isLoading = false;
@@ -67,8 +68,26 @@ export class ShowProduct implements OnInit {
     return 'box';
   }
 
-  viewImage(filename: string) {
-    window.open('http://localhost:3000/uploads/' + filename, '_blank');
+  private isCloudinaryImage(url: string | null | undefined): boolean {
+    return typeof url === 'string' && url.startsWith('http');
+  }
+
+  getProductImage(url: string | null | undefined): string {
+    return typeof url === 'string' && this.isCloudinaryImage(url) ? url : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
+  }
+
+  viewImage(url: string) {
+    const imageUrl = this.getProductImage(url);
+    if (imageUrl !== this.fallbackImg) {
+      window.open(imageUrl, '_blank');
+    }
   }
 
   editProduct(id: string) {
@@ -82,7 +101,7 @@ export class ShowProduct implements OnInit {
       confirmButtonText: 'Yes, delete'
     }).then(result => {
       if (result.isConfirmed) {
-        this.http.delete(`http://localhost:3000/api/products/delete/${id}`).subscribe({
+        this.http.delete(`https://moska-backend-cjqw.onrender.com/api/products/delete/${id}`).subscribe({
           next: () => {
             this.products = this.products.filter(p => p._id !== id);
             this.cdr.detectChanges();
@@ -105,7 +124,7 @@ export class ShowProduct implements OnInit {
     const formData = new FormData();
     formData.append('popular', newValue.toString());
 
-    this.http.put(`http://localhost:3000/api/products/update/${product._id}`, formData).subscribe({
+    this.http.put(`https://moska-backend-cjqw.onrender.com/api/products/update/${product._id}`, formData).subscribe({
       next: () => {
         this.togglingIds.delete(product._id);
         this.showToast(newValue ? '⭐ Marked as Popular' : '✖ Removed from Popular', newValue ? 'success' : 'info');

@@ -42,7 +42,9 @@
             <div class="cart-item" *ngFor="let item of cartItems">
 
                 <div class="item-img-wrap">
-                    <img [src]="imageUrl + item.productId.pic1" [alt]="item.productId.pname">
+                    <img [src]="getProductImage(item.productId?.pic1)"
+                         [alt]="item.productId.pname"
+                         (error)="onImgError($event)">
                 </div>
 
                 <div class="item-details">

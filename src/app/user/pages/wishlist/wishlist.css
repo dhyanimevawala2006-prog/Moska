@@ -82,4 +82,4 @@
 }
 .btn-remove:hover { background: #e05c5c; color: white; }
 
-:host { display: block; zoom: 1.15; }
+:host { display: block; }

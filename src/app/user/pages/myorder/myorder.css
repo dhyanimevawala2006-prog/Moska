@@ -236,7 +236,7 @@
     .order-item { flex-wrap: wrap; }
 }
 
-:host { display: block; zoom: 1.15; }
+:host { display: block; }
 
 /* ── ORDER TRACKING STEPPER ── */
 .tracking-wrap {

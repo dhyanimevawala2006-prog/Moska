@@ -10,7 +10,8 @@
     <!-- Card Body -->
     <div class="estore-card-body">
       <form [formGroup]="frmGrp" (ngSubmit)="onsubmit()">
-        <!-- Category Name Field -->
+
+        <!-- Category Name -->
         <div class="estore-form-group">
           <label class="estore-label">
             <i class="fas fa-tag"></i>
@@ -22,70 +23,62 @@
             formControlName="cat_name"
             placeholder="Enter category name"
           />
-          <app-validation-message
-            [control]="frmGrp.get('cat_name')">
+          <app-validation-message [control]="frmGrp.get('cat_name')">
           </app-validation-message>
         </div>
 
-        <!-- Category Image Field -->
+        <!-- Category Image -->
         <div class="estore-form-group">
           <label class="estore-label">
             <i class="fas fa-image"></i>
             Category Image
           </label>
+          <div class="estore-file-zone" (click)="fileInput.click()">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span>{{ selectedFileName || 'Click to upload image' }}</span>
+            <span class="file-hint">PNG, JPG, WEBP up to 5 MB</span>
+          </div>
           <input
             type="file"
-            class="estore-input"
+            #fileInput
+            class="estore-file-input"
             (change)="onFileChange($event)"
             accept="image/*"
           />
-          <app-validation-message
-            [control]="frmGrp.get('cat_pic')">
-          </app-validation-message>
+          @if (selectedFileName) {
+            <small class="file-name">
+              <i class="fas fa-check-circle"></i> {{ selectedFileName }}
+            </small>
+          }
         </div>
 
-        <!-- E-Store Categories Display (All 7) -->
+        <!-- Existing category chips (informational) -->
         <div class="estore-categories">
-          <span class="estore-category-chip">
-            <i class="fas fa-tshirt"></i> clothes
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-microchip"></i> electronics
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-capsules"></i> medical
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-gem"></i> jewellery
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-puzzle-piece"></i> toys
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-lamp"></i> decor
-          </span>
-          <span class="estore-category-chip">
-            <i class="fas fa-spray-can-sparkles"></i> beauty
-          </span>
+          <span class="estore-category-chip"><i class="fas fa-tshirt"></i> clothes</span>
+          <span class="estore-category-chip"><i class="fas fa-microchip"></i> electronics</span>
+          <span class="estore-category-chip"><i class="fas fa-capsules"></i> medical</span>
+          <span class="estore-category-chip"><i class="fas fa-gem"></i> jewellery</span>
+          <span class="estore-category-chip"><i class="fas fa-puzzle-piece"></i> toys</span>
+          <span class="estore-category-chip"><i class="fas fa-lamp"></i> decor</span>
+          <span class="estore-category-chip"><i class="fas fa-spray-can-sparkles"></i> beauty</span>
         </div>
 
-        <!-- Action Buttons -->
+        <!-- Actions -->
         <div class="estore-actions">
-          <button 
-            type="submit" 
+          <button
+            type="submit"
             class="estore-btn estore-btn-primary"
-            [disabled]="frmGrp.invalid">
+            [disabled]="frmGrp.invalid || !selectedFile">
             <i class="fas fa-plus-circle"></i>
             Add Category
           </button>
-          
-          <a 
-            routerLink="/admin/category" 
-            class="estore-btn estore-btn-secondary">
+
+          <a routerLink="/admin/category" class="estore-btn estore-btn-secondary">
             <i class="fas fa-arrow-left"></i>
             Back
           </a>
         </div>
+
       </form>
     </div>
   </div>

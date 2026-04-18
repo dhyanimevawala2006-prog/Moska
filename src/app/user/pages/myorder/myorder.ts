@@ -15,7 +15,8 @@ export class Myorder {
 
   orders: any[] = [];
   userId = sessionStorage.getItem('id');
-  imageUrl = 'http://localhost:3000/uploads/';
+  imageUrl = ''; // images are now full Cloudinary URLs stored in product.pic1
+  readonly fallbackImg = 'assets/no-image.png';
 
   trackingSteps = [
     { label: 'Ordered',   icon: 'fas fa-check',         key: 'pending'    },
@@ -36,13 +37,24 @@ export class Myorder {
     if (!this.userId) return;
     this.orderService.getUserOrders(this.userId).subscribe({
       next: (res: any) => { this.orders = res.data || []; this.cdr.detectChanges(); },
-      error: (err) => console.log(err)
+      error: () => {}
     });
   }
 
   getStepIndex(status: string): number {
     const map: any = { pending: 0, preparing: 1, shipped: 2, delivered: 3 };
     return map[status?.toLowerCase()] ?? 0;
+  }
+
+  getProductImage(url: string | null | undefined): string {
+    return typeof url === 'string' && url.startsWith('http') ? url : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
   }
 
   canCancel(status: string): boolean {

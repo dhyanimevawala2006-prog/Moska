@@ -33,7 +33,7 @@
               formControlName="category"
             >
               <option value="">Select Category</option>
-              <option *ngFor="let cat of categories" [value]="cat.cat_name">{{ cat.cat_name }}</option>
+              <option *ngFor="let cat of categories" [value]="cat._id">{{ cat.cat_name }}</option>
             </select>
           </div>
 
@@ -99,7 +99,10 @@
                   <i class="fas fa-image"></i>
                   <input type="file" accept="image/*" style="display:none" (change)="onColorImageChange(i, $event)">
                 </label>
-                <img *ngIf="c.preview || c.existingImage" [src]="c.preview || c.existingImage" class="color-img-preview">
+                <img *ngIf="c.preview || c.existingImage"
+                     [src]="getPreviewImage(c.preview || c.existingImage)"
+                     class="color-img-preview"
+                     (error)="onImgError($event)">
                 <button type="button" class="color-remove-btn" (click)="removeColor(i)" [disabled]="colorList.length === 1">
                   <i class="fas fa-times"></i>
                 </button>
@@ -134,7 +137,7 @@
                   Main Image
                 </label>
                 <div class="image-preview" *ngIf="currentMainImage">
-                  <img [src]="currentMainImage" alt="Main Image">
+                  <img [src]="getPreviewImage(currentMainImage)" alt="Main Image" (error)="onImgError($event)">
                 </div>
                 <div class="add-product-file-zone" (click)="mainFileInput.click()">
                   <i class="fas fa-cloud-upload-alt"></i>
@@ -159,7 +162,7 @@
                   Hover Image
                 </label>
                 <div class="image-preview" *ngIf="currentHoverImage">
-                  <img [src]="currentHoverImage" alt="Hover Image">
+                  <img [src]="getPreviewImage(currentHoverImage)" alt="Hover Image" (error)="onImgError($event)">
                 </div>
                 <div class="add-product-file-zone" (click)="hoverFileInput.click()">
                   <i class="fas fa-cloud-upload-alt"></i>

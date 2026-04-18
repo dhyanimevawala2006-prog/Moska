@@ -15,34 +15,27 @@ export class Category implements OnInit {
   categories: any[] = [];
   filteredCategories: any[] = [];
   searchTerm: string = '';
+  readonly fallbackImg = 'assets/no-image.png';
 
   constructor(
     private categoryService: CategoryService,
     private cdr: ChangeDetectorRef
-  ) {
-    console.log('🎯 Category component constructor called');
-  }
+  ) {}
 
   ngOnInit() {
-    console.log('🚀 Category component ngOnInit called');
     this.loadCategories();
   }
 
   loadCategories() {
-    console.log('🔄 Loading categories from API...');
     this.categoryService.get().subscribe({
       next: (res: any) => {
-        console.log('✅ Categories API Response:', res);
-        this.categories = res;
-        this.filteredCategories = [...res];
-        console.log('📦 Categories array:', this.categories);
-        console.log('📊 Total categories:', this.categories.length);
+        // GET /all now returns { success: true, data: [...] } consistently
+        const data: any[] = res?.data ?? res;
+        this.categories = Array.isArray(data) ? data : [];
+        this.filteredCategories = [...this.categories];
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('❌ Error loading categories:', err);
-        console.error('Error details:', err.message);
-      }
+      error: () => {}
     });
   }
 
@@ -54,6 +47,17 @@ export class Category implements OnInit {
       this.filteredCategories = this.categories.filter(cat =>
         cat.cat_name?.toLowerCase().includes(term)
       );
+    }
+  }
+
+  getCategoryImage(catPic: string | null | undefined) {
+    return catPic?.startsWith('http') ? catPic : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img && !img.src.endsWith('assets/no-image.png')) {
+      img.src = this.fallbackImg;
     }
   }
 }

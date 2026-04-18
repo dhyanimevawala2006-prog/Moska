@@ -14,7 +14,8 @@
     <!-- LEFT: Image Gallery -->
     <div class="pd-gallery">
       <div class="pd-main-image">
-        <img [src]="'http://localhost:3000/uploads/' + displayImage" alt="Product">
+      <img [src]="getProductImage(displayImage)" alt="Product"
+           (error)="onImgError($event)">
         
         <!-- <div class="pd-discount-badge">20% OFF</div> -->
         <div class="pd-wishlist-btn" (click)="toggleWishlist()"
@@ -26,21 +27,24 @@
       <div class="pd-thumbnails">
         <!-- Show pic1 & picHover only when no color is selected -->
         <ng-container *ngIf="!selectedColor || product.colors?.length === 0">
-          <div class="pd-thumb" [class.active]="displayImage === product.pic1" (click)="displayImage = product.pic1">
-            <img [src]="'http://localhost:3000/uploads/' + product.pic1" alt="img1">
+          <div class="pd-thumb" [class.active]="displayImage === getProductImage(product.pic1)" (click)="displayImage = getProductImage(product.pic1)">
+            <img [src]="getProductImage(product.pic1)" alt="img1"
+                 (error)="onImgError($event)">
           </div>
-          <div class="pd-thumb" [class.active]="displayImage === product.picHover" (click)="displayImage = product.picHover">
-            <img [src]="'http://localhost:3000/uploads/' + product.picHover" alt="img2">
+          <div class="pd-thumb" [class.active]="displayImage === getProductImage(product.picHover)" (click)="displayImage = getProductImage(product.picHover)">
+            <img [src]="getProductImage(product.picHover)" alt="img2"
+                 (error)="onImgError($event)">
           </div>
         </ng-container>
 
         <!-- Color thumbnails — clicking selects that color and shows its image -->
         <ng-container *ngFor="let colorObj of product.colors">
           <div class="pd-thumb"
-            *ngIf="colorObj.image && colorObj.image !== 'no-image.jpg'"
-            [class.active]="displayImage === colorObj.image"
+            *ngIf="hasColorImage(colorObj)"
+            [class.active]="displayImage === getProductImage(colorObj.image)"
             (click)="selectColor(colorObj)">
-            <img [src]="'http://localhost:3000/uploads/' + colorObj.image" [alt]="colorObj.color">
+            <img [src]="getProductImage(colorObj.image)" [alt]="colorObj.color"
+                 (error)="onImgError($event)">
           </div>
         </ng-container>
       </div>
@@ -67,8 +71,8 @@
 
       <!-- Price -->
       <div class="pd-price-row">
-        <span class="pd-price">{{product.price}}</span>
-        <span class="pd-old-price">{{product.oldPrice}}</span>
+        <span class="pd-price">₹{{product.price}}</span>
+        <span class="pd-old-price">₹{{product.oldPrice}}</span>
         <span class="pd-save" *ngIf="product.oldPrice > product.price">Save ₹{{ product.oldPrice - product.price }}</span>
       </div>
 

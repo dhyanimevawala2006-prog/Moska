@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ProductService } from '../../../service/product-service';
 import { RatingService } from '../../../service/rating-service';
 import { NgFor, NgIf, DatePipe } from '@angular/common';
@@ -14,13 +15,14 @@ import { MSwal as Swal } from '../../../service/swal-service';
   imports: [NgFor, NgIf, FormsModule, DatePipe],  templateUrl: './product-details.html',
   styleUrl: './product-details.css',
 })
-export class ProductDetails implements OnInit {
+export class ProductDetails implements OnInit, OnDestroy {
 
   id: string | null = '';
   product: any;
   selectedColor: string = '';
   selectedSize: string = '';
   displayImage: string = '';
+  readonly fallbackImg = 'assets/no-image.png';
 
   // reviews state
   reviews: any[] = [];
@@ -48,25 +50,27 @@ export class ProductDetails implements OnInit {
   ) {}
 
   isWishlisted = false;
+  private wishlistSub!: Subscription;
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
     this.loadProduct();
     this.loadReviews();
-    if (this.user_id) {
-      this.wishlistService.load(this.user_id);
-      this.wishlistService.wishlistIds$.subscribe(ids => {
-        this.isWishlisted = ids.has(this.id!);
-        this.cdr.detectChanges();
-      });
-    }
+    this.wishlistSub = this.wishlistService.wishlistIds$.subscribe(ids => {
+      this.isWishlisted = ids.includes(this.id!);
+      this.cdr.detectChanges();
+    });
+  }
+
+  ngOnDestroy() {
+    this.wishlistSub?.unsubscribe();
   }
 
   loadProduct() {
     this.productService.getById(this.id).subscribe({
       next: (res: any) => {
         this.product = res.data;
-        this.displayImage = this.product.pic1;
+        this.displayImage = this.getProductImage(this.product?.pic1);
 
         // Check if a color was passed via queryParam
         const paramColor = this.route.snapshot.queryParamMap.get('color');
@@ -75,15 +79,16 @@ export class ProductDetails implements OnInit {
           const match = this.product.colors.find((c: any) => (c.color ?? c) === paramColor);
           if (match) {
             this.selectedColor = match.color ?? match;
-            this.displayImage = (match.image && match.image !== 'no-image.jpg')
-              ? match.image : this.product.pic1;
+            this.displayImage = this.isCloudinaryImage(match?.image)
+              ? match.image
+              : this.getProductImage(this.product?.pic1);
           } else {
             this.selectedColor = paramColor;
           }
         } else if (this.product.colors?.length > 0) {
           const first = this.product.colors[0];
           this.selectedColor = first.color ?? first;
-          if (first.image && first.image !== 'no-image.jpg') {
+          if (this.isCloudinaryImage(first?.image)) {
             this.displayImage = first.image;
           }
         }
@@ -91,6 +96,25 @@ export class ProductDetails implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  private isCloudinaryImage(url: string | null | undefined): boolean {
+    return typeof url === 'string' && url.startsWith('http');
+  }
+
+  getProductImage(url: string | null | undefined): string {
+    return typeof url === 'string' && this.isCloudinaryImage(url) ? url : this.fallbackImg;
+  }
+
+  hasColorImage(colorObj: any): boolean {
+    return this.isCloudinaryImage(colorObj?.image);
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
   }
 
   loadReviews() {
@@ -107,10 +131,9 @@ export class ProductDetails implements OnInit {
 
   selectColor(colorObj: any) {
     this.selectedColor = colorObj.color ?? colorObj;
-    // Always show the color's own image; fall back to pic1 only if no image attached
-    this.displayImage = (colorObj.image && colorObj.image !== 'no-image.jpg')
+    this.displayImage = this.hasColorImage(colorObj)
       ? colorObj.image
-      : this.product.pic1;
+      : this.getProductImage(this.product?.pic1);
     this.cdr.detectChanges();
   }
 
@@ -160,52 +183,23 @@ export class ProductDetails implements OnInit {
   toggleWishlist() {
     if (!this.user_id) { this.router.navigate(['/login']); return; }
     const wasWishlisted = this.isWishlisted;
-    this.wishlistService.toggle(this.user_id, this.id!).subscribe({
-      next: (res: any) => {
-        const ids = (res.data || []).map((id: any) => id.toString());
-        this.wishlistService.updateIds(ids);
-        this.cdr.detectChanges();
+    this.wishlistService.toggle(this.id!);
 
-        const dark = this.themeService.dark;
-        const swalDark = dark ? {
-          background: '#1e1e1e',
-          color: '#f0ebe4',
-        } : {};
+    const dark = this.themeService.dark;
+    const swalDark = dark ? { background: '#1e1e1e', color: '#f0ebe4' } : {};
 
-        if (!wasWishlisted) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Added to Wishlist!',
-            text: 'This product has been saved to your wishlist.',
-            timer: 2000,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-end',
-            ...swalDark
-          });
-        } else {
-          Swal.fire({
-            icon: 'info',
-            title: 'Removed from Wishlist',
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-end',
-            ...swalDark
-          });
-        }
-      },
-      error: () => {
-        const dark = this.themeService.dark;
-        Swal.fire({
-          icon: 'error',
-          title: 'Something went wrong',
-          timer: 2000,
-          showConfirmButton: false,
-          ...(dark ? { background: '#1e1e1e', color: '#f0ebe4' } : {})
-        });
-      }
-    });
+    if (!wasWishlisted) {
+      Swal.fire({
+        icon: 'success', title: 'Added to Wishlist!',
+        text: 'This product has been saved to your wishlist.',
+        timer: 2000, showConfirmButton: false, toast: true, position: 'top-end', ...swalDark
+      });
+    } else {
+      Swal.fire({
+        icon: 'info', title: 'Removed from Wishlist',
+        timer: 1500, showConfirmButton: false, toast: true, position: 'top-end', ...swalDark
+      });
+    }
   }
 
   addToCart(pid: any) {
@@ -238,7 +232,7 @@ export class ProductDetails implements OnInit {
           position: 'top-end',
         });
       },
-      error: () => console.log('error adding cart'),
+      error: () => {}
     });
   }
 
@@ -259,7 +253,7 @@ export class ProductDetails implements OnInit {
       quantity: this.quantity,
       color: this.selectedColor || '',
       size: this.selectedSize || '',
-      displayImage: this.displayImage || this.product.pic1,
+      displayImage: this.getProductImage(this.displayImage || this.product?.pic1),
     }];
 
     const total = this.product.price * this.quantity;

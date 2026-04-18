@@ -5,12 +5,12 @@ import { Observable } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class CategoryService {
 
-  private api = 'http://localhost:3000/api/categories';
+  private api = 'https://moska-backend-cjqw.onrender.com/api/categories';
 
   constructor(private http: HttpClient) {}
 
-  get(): Observable<any[]> {
-    return this.http.get<any[]>(this.api + '/all');
+  get(): Observable<any> {
+    return this.http.get<any>(this.api + '/all');
   }
 
    getSingleCategory(id: string) {

@@ -20,12 +20,13 @@ export class Cart {
   cartItems: any[] = [];
   total: number = 0;
   userId = sessionStorage.getItem('id');
-  imageUrl = 'http://localhost:3000/uploads/';
+  imageUrl = ''; // images are now full Cloudinary URLs stored in product.pic1
   couponCode: string = '';
   discount: number = 0;
   finalTotal: number = 0;
   couponError: string = '';
   dropdownOpen = false;
+  readonly fallbackImg = 'assets/no-image.png';
 
   constructor(
     private cartService: CartService,
@@ -48,6 +49,17 @@ export class Cart {
     sessionStorage.clear();
     this.dropdownOpen = false;
     this.router.navigate(['/login']);
+  }
+
+  getProductImage(url: string | null | undefined): string {
+    return typeof url === 'string' && url.startsWith('http') ? url : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
   }
 
   // toggleCouponList() {

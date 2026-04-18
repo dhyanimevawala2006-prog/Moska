@@ -12,8 +12,8 @@ import { MSwal as Swal } from '../../../service/swal-service';
 })
 export class Allorder {
   orders: any[] = [];
-  imageUrl = 'http://localhost:3000/uploads/';
   searchText: string = '';
+  readonly fallbackImg = 'assets/no-image.png';
 
   constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
@@ -37,7 +37,7 @@ export class Allorder {
         this.orders = res.data || [];
         this.cdr.detectChanges();
       },
-      error: (err) => console.log(err)
+      error: () => {}
     });
   }
 
@@ -47,7 +47,18 @@ export class Allorder {
         Swal.fire({ icon: 'success', title: 'Status Updated', timer: 1200, showConfirmButton: false });
         this.getOrders();
       },
-      error: (err) => console.log(err)
+      error: () => {}
     });
+  }
+
+  getProductImage(pic: string | null | undefined) {
+    return pic?.startsWith('http') ? pic : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img) {
+      img.src = this.fallbackImg;
+    }
   }
 }

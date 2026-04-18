@@ -47,10 +47,14 @@
                 <!-- Images -->
                 <td>
                   <div class="product-images">
-                    <img [src]="'http://localhost:3000/uploads/' + p.pic1"
-                         class="image-thumb" title="Main" (click)="viewImage(p.pic1)" alt="Main">
-                    <img [src]="'http://localhost:3000/uploads/' + p.picHover"
-                         class="image-thumb" title="Hover" (click)="viewImage(p.picHover)" alt="Hover">
+                    <img [src]="getProductImage(p.pic1)"
+                         class="image-thumb" title="Main"
+                         (click)="viewImage(p.pic1)"
+                         (error)="onImgError($event)" alt="Main">
+                    <img [src]="getProductImage(p.picHover)"
+                         class="image-thumb" title="Hover"
+                         (click)="viewImage(p.picHover)"
+                         (error)="onImgError($event)" alt="Hover">
                   </div>
                 </td>
 

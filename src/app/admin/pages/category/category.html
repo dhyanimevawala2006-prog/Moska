@@ -57,13 +57,13 @@
             <td class="estore-category-image">
               <div class="image-wrapper">
                 <img
-                  [src]="'http://localhost:3000/uploads/' + category.cat_pic"
+                  [src]="getCategoryImage(category.cat_pic)"
                   class="estore-cat-img"
                   alt="{{ category.cat_name }}"
                   (click)="viewImage(category.cat_pic); $event.stopPropagation()"
                   title="Click to view full size"
                   style="cursor: pointer;"
-                  onerror="this.src='assets/images/default-category.jpg'"
+                  (error)="onImgError($event)"
                 />
               </div>
             </td>
@@ -113,7 +113,7 @@
       <button class="close-modal" (click)="closeImageModal()">
         <i class="fas fa-times"></i>
       </button>
-      <img [src]="selectedImage" alt="Category Image" class="modal-image">
+      <img [src]="selectedImage" alt="Category Image" class="modal-image" (error)="onImgError($event)">
     </div>
   </div>
 </div>

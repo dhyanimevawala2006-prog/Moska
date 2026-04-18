@@ -18,6 +18,7 @@ export class Category implements OnInit {
   searchTerm: string = '';
   selectedImage: string = '';
   showImageModal: boolean = false;
+  readonly fallbackImg = 'assets/no-image.png';
 
   constructor(
     private categoryService: CategoryService,
@@ -32,13 +33,15 @@ export class Category implements OnInit {
   loadCategories() {
     this.categoryService.get().subscribe({
       next: (res: any) => {
-        this.categories = res;
-        this.filteredCategories = [...res];
-        this.cdr.detectChanges(); 
-        console.log('✅ Categories loaded:', this.categories);
-        console.log('First category:', this.categories[0]);
+        // GET /all now returns { success: true, data: [...] } consistently
+        const data: any[] = res?.data ?? res;
+        this.categories = Array.isArray(data) ? data : [];
+        this.filteredCategories = [...this.categories];
+        this.cdr.detectChanges();
       },
-      error: (err) => console.error('❌ Error loading categories:', err)
+      error: (err) => {
+        console.error('Failed to load categories:', err);
+      }
     });
   }
 
@@ -53,13 +56,20 @@ export class Category implements OnInit {
     }
   }
 
-  viewImage(imagePath: string) {
-    console.log('🖼️ Image clicked!');
-    console.log('Image path:', imagePath);
-    this.selectedImage = 'http://localhost:3000/uploads/' + imagePath;
+  getCategoryImage(catPic: string | null | undefined) {
+    return catPic?.startsWith('http') ? catPic : this.fallbackImg;
+  }
+
+  onImgError(event: Event) {
+    const img = event.target as HTMLImageElement | null;
+    if (img && !img.src.endsWith('assets/no-image.png')) {
+      img.src = this.fallbackImg;
+    }
+  }
+
+  viewImage(imageUrl: string) {
+    this.selectedImage = this.getCategoryImage(imageUrl);
     this.showImageModal = true;
-    console.log('Modal should show:', this.showImageModal);
-    console.log('Selected image:', this.selectedImage);
   }
 
   closeImageModal() {
@@ -68,9 +78,6 @@ export class Category implements OnInit {
   }
 
   editCategory(id: string) {
-    console.log('🔵 Edit button clicked!');
-    console.log('🔵 Category ID:', id);
-    console.log('🔵 Navigating to: /admin/editcategory/' + id);
     this.router.navigate(['/admin/editcategory', id]);
   }
 
@@ -87,7 +94,6 @@ export class Category implements OnInit {
             this.loadCategories();
           },
           error: (err) => {
-            console.error('Delete error:', err);
             Swal.fire({ icon: 'error', title: 'Failed', text: 'Failed to delete category', confirmButtonColor: '#9B7B5E' });
           }
         });

@@ -28,8 +28,9 @@ export class AddProduct implements OnInit {
   selectedSizes: string[] = [];
 
   get isClothesCategory(): boolean {
-    const cat = this.productForm.get('category')?.value;
-    return cat?.toLowerCase() === 'clothes';
+    const catId = this.productForm.get('category')?.value;
+    const cat = this.categories.find(c => c._id === catId);
+    return cat?.cat_name?.toLowerCase() === 'clothes';
   }
 
   toggleSize(size: string) {
@@ -63,16 +64,13 @@ export class AddProduct implements OnInit {
 
   ngOnInit() {
     this.categoryService.get().subscribe({
-      next: (res: any) => { this.categories = res?.length > 0 ? res : this.defaultCategories(); },
-      error: () => { this.categories = this.defaultCategories(); }
+      next: (res: any) => { this.categories = res?.data ?? res; },
+      error: () => { this.categories = []; }
     });
   }
 
   defaultCategories() {
-    return [
-      { cat_name: 'Clothes' }, { cat_name: 'Beauty' }, { cat_name: 'Medicine' },
-      { cat_name: 'Electronic Item' }, { cat_name: 'Toy' }, { cat_name: 'Jewellery' }
-    ];
+    return [];
   }
 
   onMainFileChange(event: any) {
